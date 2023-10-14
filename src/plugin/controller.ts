@@ -1,11 +1,16 @@
 import { showUI, on, emit } from '@create-figma-plugin/utilities'
-import { ClosePluginEvent, CreateRectanglesEvent, RectanglesCreatedEvent } from '../events/handlers'
+import { ClosePluginEvent, CreateSwatchesEvent, CreateRectanglesEvent, RectanglesCreatedEvent } from '../events/handlers'
 import { createRectangles } from './utilities/createRectangles'
+import { createSwatches } from './utilities/createSwatches'
 
 export default function () {
 
     // Tell Figma the size the plugin UI window.
     showUI({ height: 500, width: 400 })
+
+    on<CreateSwatchesEvent>('CREATE_SWATCHES', (grid) => {
+        createSwatches(grid)
+    })
 
     on<CreateRectanglesEvent>('CREATE_RECTANGLES', (count) => {
 

@@ -1,5 +1,9 @@
 import { EventHandler } from '@create-figma-plugin/utilities'
 
+export interface CreateSwatchesEvent extends EventHandler {
+  name: 'CREATE_SWATCHES'
+  handler: (data: any) => void}
+
 export interface CreateRectanglesEvent extends EventHandler {
   name: 'CREATE_RECTANGLES'
   handler: (count: string) => void

@@ -3,7 +3,7 @@ import { h, JSX } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 import { Button, Container, Inline, Stack, Text, Muted, Textbox, VerticalSpace, Dropdown, DropdownOption, TabsOption, Tabs, FileUploadDropzone, render } from '@create-figma-plugin/ui'
 import { emit, on } from '@create-figma-plugin/utilities'
-import { CreateRectanglesEvent, RectanglesCreatedEvent, ClosePluginEvent } from './events/handlers'
+import { CreateSwatchesEvent, RectanglesCreatedEvent, ClosePluginEvent } from './events/handlers'
 import { SuccessModal } from './views/SuccessModal'
 import { Options } from './genome/constants/weightedTargets'
 import { Mapper } from './genome/mapper'
@@ -88,9 +88,10 @@ function App() {
             const index = optimization ? parseInt(optimization) : 0
             const mapModel = new SwatchMapModel(WeightedTargets(index))
             if (swatches && mapModel) {
-                let grid = {...Mapper.mapSwatchesToTarget(swatches, mapModel)}
-                grid = Mapper.removeUndefinedWeightSwatches(grid);
-                console.log("READY TO EMIT", grid)
+                let grid = Mapper.mapSwatchesToTarget(swatches, mapModel)
+                grid = Mapper.removeUndefinedWeightSwatches(grid)
+                emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
+                // console.log("READY TO EMIT", grid)
             }
 
         }
