@@ -9,6 +9,7 @@ export const createSwatches = async (grid: Matrix.Grid) => {
 
     loadFonts().then(() => {
         populateFigmaColorStyles(grid)
+        // figma.closePlugin()
     })
 
 }

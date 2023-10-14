@@ -65,8 +65,7 @@ export const getClosestIndex = (swatch: Matrix.Swatch, targets: Array<any>) => {
 };
 
 export const formatData = (data: any) => {
-    let grid = JSON.parse(data) as Matrix.Grid;
-    return grid;
+    return JSON.parse(data) as Matrix.Grid;
 };
 
 export * as Mapper from '.';

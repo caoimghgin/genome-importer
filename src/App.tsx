@@ -31,6 +31,7 @@ function App() {
 
     useEffect(() => {
         console.log("Swatches have been set ->", swatches)
+        // handleImportFile()
     }, [swatches])
 
     // Handler method updating the useState property of 'showCompleteModal' which
@@ -45,6 +46,17 @@ function App() {
         emit<ClosePluginEvent>("CLOSE_PLUGIN")
     }
 
+    const handleImportFile = () => {
+        const optimization = Options.find(item => item.label === optimizationValue)?.value
+        const index = optimization ? parseInt(optimization) : 0
+        const mapModel = new SwatchMapModel(WeightedTargets(index))
+        if (swatches && mapModel) {
+            let grid = Mapper.mapSwatchesToTarget({...swatches}, mapModel)
+            grid = Mapper.removeUndefinedWeightSwatches(grid)
+            emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
+        }
+    }
+
     const ImportView = () => {
         return (
             <Container space="medium">
@@ -54,7 +66,11 @@ function App() {
                 <FileUploadDropzone onSelectedFiles={handleSelectedFiles}>
                     <Text align="center">
                         <VerticalSpace space="extraLarge" />
+                        <VerticalSpace space="extraLarge" />
+                        <VerticalSpace space="extraLarge" />
                         <Muted>Text</Muted>
+                        <VerticalSpace space="extraLarge" />
+                        <VerticalSpace space="extraLarge" />
                         <VerticalSpace space="extraLarge" />
                     </Text>
                 </FileUploadDropzone>
@@ -79,7 +95,10 @@ function App() {
             const fileReader = new FileReader()
             fileReader.readAsText(files[0], 'UTF-8')
             fileReader.onload = (event) => {
-                if (event.target) setSwatches(Mapper.formatData(event.target.result))
+                if (event && event.target) {
+                    const data = event.target.result
+                    setSwatches(Mapper.formatData(data))
+                }
             }
         }
 
@@ -88,12 +107,10 @@ function App() {
             const index = optimization ? parseInt(optimization) : 0
             const mapModel = new SwatchMapModel(WeightedTargets(index))
             if (swatches && mapModel) {
-                let grid = Mapper.mapSwatchesToTarget(swatches, mapModel)
+                let grid = Mapper.mapSwatchesToTarget({...swatches}, mapModel)
                 grid = Mapper.removeUndefinedWeightSwatches(grid)
                 emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
-                // console.log("READY TO EMIT", grid)
             }
-
         }
 
     }
