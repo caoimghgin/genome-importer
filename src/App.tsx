@@ -18,43 +18,95 @@ function App() {
     const [optimizationOptions, setOptimizationOptions] = useState(Array<DropdownOption>({ value: 'Genome' }))
     const [optimizationValue, setOptimizationValue] = useState<string>('Genome');
     const [swatches, setSwatches] = useState<Matrix.Grid>();
+    const [foo, setFoo] = useState<Matrix.Grid>();
 
     useEffect(() => {
-
         setOptimizationOptions(Options.map(item => { return { value: item.label } }))
-
-        on<RectanglesCreatedEvent>('RECTANGLES_CREATED_EVENT', () => {
-            setShowCompletedModal(true);
-        })
-
     }, [])
 
     useEffect(() => {
         console.log("Swatches have been set ->", swatches)
-        // handleImportFile()
     }, [swatches])
 
-    // Handler method updating the useState property of 'showCompleteModal' which
-    // toggles the visiblity of CompleteModal.tsx
     const handleShowCompletedModel = () => {
         setShowCompletedModal(!showCompletedModal)
     }
 
-    // Handler method that sends the 'ClosePluginEvent' which is listened 
-    // to by controller.ts to quit the plugin
     const handleClosePlugin = () => {
         emit<ClosePluginEvent>("CLOSE_PLUGIN")
     }
 
     const handleImportFile = () => {
+        createModel()
+        // //
+        // // This is doing too much. 
+        // //
+        // const optimization = Options.find(item => item.label === optimizationValue)?.value
+        // const index = optimization ? parseInt(optimization) : 0
+        // const mapModel = new SwatchMapModel(WeightedTargets(index))
+        // if (swatches && mapModel) {
+        //     let grid = Mapper.mapSwatchesToTarget(swatches, mapModel)
+        //     grid = Mapper.removeUndefinedWeightSwatches(grid)
+        //     console.log(grid)
+        //     // emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
+        // }
+    }
+
+    const createModel = () => {
+
+        console.log("SWATCHES", swatches!)
+        console.log("ONCE SWATCHES ARE SET, THE SHOULD NEVER CHANGE....")
+
+
+
+
         const optimization = Options.find(item => item.label === optimizationValue)?.value
         const index = optimization ? parseInt(optimization) : 0
         const mapModel = new SwatchMapModel(WeightedTargets(index))
-        if (swatches && mapModel) {
-            let grid = Mapper.mapSwatchesToTarget({...swatches}, mapModel)
-            grid = Mapper.removeUndefinedWeightSwatches(grid)
-            emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
+        console.log("mapModel", mapModel!)
+        const kdkdk = Mapper.mapSwatchesToTarget(swatches!, mapModel)
+        let grid = {...kdkdk}
+        console.log("grid (1)", grid)
+        // grid = Mapper.removeUndefinedWeightSwatches({...grid})
+        // // I'd like to set this to a setState variable, I think....
+        // console.log("grid (2)", grid)
+
+        const foo = grid.columns.map(col => {
+            return col.rows.map(row => row).filter(swatch => Boolean(swatch.weight))
+        })
+
+        console.log("MIGhtY FOOoo!", foo)
+
+    }
+
+
+    // export const removeUndefinedWeightSwatches = (grid: Matrix.Grid) => {
+    //     const result = {...grid}
+    //     result.columns.forEach(function (column, index) {
+    //         let weightOptimizedSwatches = column.rows.filter((swatch) => {
+    //             return swatch.weight !== undefined;
+    //         });
+    //         result.columns[index].rows = weightOptimizedSwatches;
+    //     });
+    
+    //     return result;
+    // };
+
+    const handleSelectedFiles = (files: Array<File>) => {
+        const fileReader = new FileReader()
+        fileReader.readAsText(files[0], 'UTF-8')
+        fileReader.onload = (event) => {
+            if (event && event.target) {
+                // @ts-ignore
+                setSwatches(JSON.parse(event.target.result) as Matrix.Grid)
+            }
         }
+    }
+
+    const handleOptimizationChange = (event: JSX.TargetedEvent<HTMLInputElement>) => {
+        const newValue = event.currentTarget.value;
+        console.log(newValue);
+        setOptimizationValue(newValue);
     }
 
     const ImportView = () => {
@@ -84,35 +136,6 @@ function App() {
                 <SuccessModal message={count} show={showCompletedModal} toggle={handleShowCompletedModel} complete={handleClosePlugin} />
             </Container>
         )
-
-        function handleOptimizationChange(event: JSX.TargetedEvent<HTMLInputElement>) {
-            const newValue = event.currentTarget.value;
-            console.log(newValue);
-            setOptimizationValue(newValue);
-        }
-
-        function handleSelectedFiles(files: Array<File>) {
-            const fileReader = new FileReader()
-            fileReader.readAsText(files[0], 'UTF-8')
-            fileReader.onload = (event) => {
-                if (event && event.target) {
-                    const data = event.target.result
-                    setSwatches(Mapper.formatData(data))
-                }
-            }
-        }
-
-        function handleImportFile() {
-            const optimization = Options.find(item => item.label === optimizationValue)?.value
-            const index = optimization ? parseInt(optimization) : 0
-            const mapModel = new SwatchMapModel(WeightedTargets(index))
-            if (swatches && mapModel) {
-                let grid = Mapper.mapSwatchesToTarget({...swatches}, mapModel)
-                grid = Mapper.removeUndefinedWeightSwatches(grid)
-                emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
-            }
-        }
-
     }
 
     const OptionsView = () => {

@@ -2,18 +2,22 @@ import { Matrix } from '../modules/SwatchMatrix';
 import { SwatchMapModel } from '../models/SwatchMapModel';
 
 export const removeUndefinedWeightSwatches = (grid: Matrix.Grid) => {
-    grid.columns.forEach(function (column, index) {
+    const result = {...grid}
+    result.columns.forEach(function (column, index) {
         let weightOptimizedSwatches = column.rows.filter((swatch) => {
             return swatch.weight !== undefined;
         });
-        grid.columns[index].rows = weightOptimizedSwatches;
+        result.columns[index].rows = weightOptimizedSwatches;
     });
 
-    return grid;
+    return result;
 };
 
 export const mapSwatchesToTarget = (grid: Matrix.Grid, mapper: SwatchMapModel) => {
-    grid.columns.forEach(function (column) {
+
+    const result = {...grid}
+
+    result.columns.forEach(function (column) {
         let neutralTargets = column.rows[12].isNeutral;
         let targets = mapper.newTargets(neutralTargets);
 
@@ -53,10 +57,11 @@ export const mapSwatchesToTarget = (grid: Matrix.Grid, mapper: SwatchMapModel) =
         });
     });
 
-    return grid;
+    return result;
 };
 
 export const getClosestIndex = (swatch: Matrix.Swatch, targets: Array<any>) => {
+    
     let m = swatch.l_target === 85 ? -2.5 : 0;
     var closest = targets.reduce(function (prev, curr) {
         return Math.abs(curr - (swatch.lightness + m)) < Math.abs(prev - (swatch.lightness + m)) ? curr : prev;
