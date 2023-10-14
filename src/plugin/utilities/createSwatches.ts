@@ -5,6 +5,12 @@ const rootName = 'palette' as String;
 const swatchWidth = 140;
 const swatchHeight = 44;
 
+//
+// I want to flatten the Matix.Grid and pass a generic array
+// rather than grid.columns or grid.columns.rows, the structure
+// is implicit and works better.
+//
+
 export const createSwatches = async (grid: Matrix.Grid) => {
     loadFonts().then(() => {
         populateFigmaColorStyles(grid)

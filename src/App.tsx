@@ -67,15 +67,20 @@ function App() {
         const kdkdk = Mapper.mapSwatchesToTarget(swatches!, mapModel)
         let grid = {...kdkdk}
         console.log("grid (1)", grid)
-        // grid = Mapper.removeUndefinedWeightSwatches({...grid})
+        grid = Mapper.removeUndefinedWeightSwatches({...grid})
         // // I'd like to set this to a setState variable, I think....
-        // console.log("grid (2)", grid)
+        console.log("grid (2)", grid)
+        emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
 
-        const foo = grid.columns.map(col => {
-            return col.rows.map(row => row).filter(swatch => Boolean(swatch.weight))
-        })
 
-        console.log("MIGhtY FOOoo!", foo)
+        // //
+        // // A New Hope
+        // //
+        // const foo = grid.columns.map(col => {
+        //     return col.rows.map(row => row).filter(swatch => Boolean(swatch.weight))
+        // })
+        // console.log("MIGhtY FOOoo!", foo)
+        // emit<CreateSwatchesEvent>('CREATE_SWATCHES', foo)
 
     }
 
