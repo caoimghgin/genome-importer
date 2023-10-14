@@ -5,7 +5,7 @@ import { createRectangles } from './utilities/createRectangles'
 export default function () {
 
     // Tell Figma the size the plugin UI window.
-    showUI({ height: 220, width: 300 })
+    showUI({ height: 500, width: 400 })
 
     on<CreateRectanglesEvent>('CREATE_RECTANGLES', (count) => {
 
