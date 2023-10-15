@@ -7,6 +7,7 @@ import { lightningOptimization } from "../optimizations/lightning";
 import { materialOptimization } from "../optimizations/material";
 import { newsKitOptimization } from "../optimizations/newsKit";
 import { spectrumOptimization } from "../optimizations/spectrum";
+import { baseOptimization } from "../optimizations/base";
 
 export type weightedTargetsRow = {
     target: number;
@@ -31,7 +32,7 @@ export const Options = [
 ];
 
 enum WeightedTargetsOptions {
-    Spectrum = 0,
+    Base = 0,
     Genome,
     Carbon,
     Lightning,
@@ -44,8 +45,8 @@ enum WeightedTargetsOptions {
 
 export const WeightedTargets = (index: WeightedTargetsOptions): weightedTargetsColumn => {
     switch (index) {
-        case WeightedTargetsOptions.Spectrum:
-            return spectrumOptimization;
+        case WeightedTargetsOptions.Base:
+            return baseOptimization;
         case WeightedTargetsOptions.Carbon:
             return carbonOptimization;
         case WeightedTargetsOptions.Lightning:
