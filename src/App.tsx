@@ -38,6 +38,10 @@ function App() {
 
     const handleImportFile = () => {
         createModel()
+
+
+
+
         // //
         // // This is doing too much. 
         // //
@@ -57,28 +61,53 @@ function App() {
         console.log("SWATCHES", swatches!)
         console.log("ONCE SWATCHES ARE SET, THE SHOULD NEVER CHANGE....")
 
-
-
-
         const optimization = Options.find(item => item.label === optimizationValue)?.value
         const index = optimization ? parseInt(optimization) : 0
         const mapModel = new SwatchMapModel(WeightedTargets(index))
-        console.log("mapModel", mapModel!)
-        const kdkdk = Mapper.mapSwatchesToTarget(swatches!, mapModel)
-        let grid = {...kdkdk}
+        const grid = Mapper.mapSwatchesToTarget(swatches!, mapModel)
         console.log("grid (1)", grid)
-        grid = Mapper.removeUndefinedWeightSwatches({...grid})
-        // // I'd like to set this to a setState variable, I think....
-        console.log("grid (2)", grid)
-        emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
+
+        const foo = grid.columns.map(col => {
+            const rows = col.rows.map(row => row).filter(swatch => Boolean(swatch.weight))
+            return { semantic: col.semantic, rows: rows}
+        })
+
+        // console.log("MIGhtY FOOoo XXX!", {columns: foo})
+        emit<CreateSwatchesEvent>('CREATE_SWATCHES', {columns: foo})
+
+        // let epic = new Matrix.Grid()
+        // epic = swatches!
+        // console.log("My EPIC", epic)
+        // const optimization = Options.find(item => item.label === optimizationValue)?.value
+        // const index = optimization ? parseInt(optimization) : 0
+        // const mapModel = new SwatchMapModel(WeightedTargets(index))
+        // console.log("mapModel", mapModel!)
+        // const kdkdk = Mapper.mapSwatchesToTarget(swatches!, mapModel)
+        // let grid = {...kdkdk}
+        // console.log("grid (1)", grid)
+        // grid = Mapper.removeUndefinedWeightSwatches({...grid})
+        // // // I'd like to set this to a setState variable, I think....
+        // console.log("grid (2)", grid)
+        // // emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
 
 
-        // //
-        // // A New Hope
-        // //
+
+  
+        // const xxx = grid.columns.map(col => {
+        //     const row = col.rows.map(row => row).filter(swatch => Boolean(swatch.weight))
+        //     return col
+        //     return col.rows = row
+        // })
+        // //{semantic: 'primary', rows: Array(14)}
+        // console.log("MIGhtY FOOoo XXX!", {columns: xxx})
+
+        //
+        // A New Hope
+        //
         // const foo = grid.columns.map(col => {
         //     return col.rows.map(row => row).filter(swatch => Boolean(swatch.weight))
         // })
+        // const bar = grid.columns.map(col => col.rows = [])
         // console.log("MIGhtY FOOoo!", foo)
         // emit<CreateSwatchesEvent>('CREATE_SWATCHES', foo)
 
