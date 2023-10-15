@@ -8,7 +8,7 @@ export default function () {
     // Tell Figma the size the plugin UI window.
     showUI({ height: 500, width: 400 })
 
-    on<CreateSwatchesEvent>('CREATE_SWATCHES', (grid) => {
+    on<CreateSwatchesEvent>('CREATE_SWATCHES', async (grid) => {
         createSwatches(grid)
     })
 

@@ -1,5 +1,7 @@
 
 import { Matrix } from "../../genome/modules/SwatchMatrix";
+import { emit } from "@create-figma-plugin/utilities";
+import { SwatchesCreatedEvent } from "../../events/handlers";
 
 const rootName = 'palette' as String;
 const swatchWidth = 140;
@@ -13,8 +15,15 @@ const swatchHeight = 44;
 
 export const createSwatches = async (grid: Matrix.Grid) => {
     loadFonts().then(() => {
-        populateFigmaColorStyles(grid)
-        // figma.closePlugin()
+        if (!paintStyleExists(grid)) {
+            populateFigmaColorStyles(grid)
+        } else {
+            updateFigmaColorStyles(grid);
+        }
+        figma.closePlugin()
+        // emit<SwatchesCreatedEvent>("SWATCHES_CREATED")
+        // emit<ClosePluginEvent>("CLOSE_PLUGIN")
+
     })
 }
 
@@ -41,6 +50,58 @@ function populateFigmaColorStyles(grid: Matrix.Grid) {
     // @ts-ignore
     figma.currentPage.selection = nodes;
     figma.viewport.scrollAndZoomIntoView(nodes);
+}
+
+const updateFigmaColorStyles = (grid: Matrix.Grid) => {
+    grid.columns.forEach(function (column) {
+        column.rows.forEach(function (swatch) {
+            let name = createPaintStyleName(swatch);
+            let paintStyle = getPaintStyleWithPathName(name)[0];
+            updatePaintStyle(swatch, paintStyle);
+            updateSwatchLabel(swatch);
+        });
+    });
+}
+
+function paintStyleExists(grid: Matrix.Grid) {
+    let swatch = grid.columns[0].rows[0];
+    let painStyleName = createPaintStyleName(swatch);
+    return localPaintStyleNames().includes(painStyleName) ? true : false;
+}
+
+function updateSwatchLabel(swatch: Matrix.Swatch) {
+    let name = createFrameName(swatch);
+    let frameNode = figma.currentPage.findOne((n) => n.name === name) as FrameNode;
+    let r = frameNode.children[0] as TextNode;
+
+    let label = swatch.hex.toUpperCase();
+    if (swatch.isUserDefined) label = '⭐️ ' + label;
+    if (swatch.isPinned) label = '📍 ' + label;
+    r.characters = label;
+
+    r.name = r.characters + ' (L*' + swatch.lightness + ')';
+    r.fills =
+        swatch.WCAG2_W_45 || swatch.WCAG2_W_30
+            ? [{type: 'SOLID', color: {r: 1, g: 1, b: 1}}]
+            : [{type: 'SOLID', color: {r: 0, g: 0, b: 0}}];
+    r.fontName =
+        swatch.WCAG2_W_30 && !swatch.WCAG2_W_45
+            ? {family: 'Inter', style: 'Bold'}
+            : {family: 'Inter', style: 'Regular'};
+    return r;
+}
+
+function getPaintStyleWithPathName(name: string) {
+    return figma.getLocalPaintStyles().filter((obj) => {
+        return obj.name === name;
+    });
+}
+
+function updatePaintStyle(swatch: Matrix.Swatch, style: PaintStyle) {
+    const result = style;
+    result.description = createPaintStyleDescription(swatch);
+    result.paints = [{type: 'SOLID', color: hexToRgb(swatch.hex)}];
+    return result;
 }
 
 function createSemanticLabel(column: Matrix.Column, offsetX: number) {
@@ -122,6 +183,12 @@ function createSwatchLabel(swatch: Matrix.Swatch) {
 }
 
 function createPaintStyle(swatch: Matrix.Swatch) {
+
+    //
+    // Maybe check to see if the painStyle exists before 
+    // creating it. If exists, simply update and return.
+    //
+
     const result = figma.createPaintStyle()
     result.name = createPaintStyleName(swatch)
     result.description = createPaintStyleDescription(swatch)
@@ -176,3 +243,7 @@ const loadFonts = async () => {
     await figma.loadFontAsync({ family: 'Inter', style: 'Medium' });
     await figma.loadFontAsync({ family: 'Inter', style: 'Bold' });
 };
+
+const localPaintStyleNames = () => {
+    return figma.getLocalPaintStyles().map((style) => style.name);
+}
