@@ -4,7 +4,6 @@ import { useEffect, useState } from 'preact/hooks'
 import { Button, Container, Inline, Text, Muted, VerticalSpace, Dropdown, DropdownOption, TabsOption, Tabs, FileUploadDropzone, render } from '@create-figma-plugin/ui'
 import { emit, on } from '@create-figma-plugin/utilities'
 import { CreateSwatchesEvent, SwatchesCreatedEvent, ClosePluginEvent } from './events/handlers'
-import { SuccessModal } from './views/SuccessModal'
 import { Options } from './genome/constants/weightedTargets'
 import { Mapper } from './genome/mapper'
 import { Matrix } from './genome/modules/SwatchMatrix'
@@ -14,7 +13,6 @@ import { RenderPreview } from './views/RenderPreview'
 function App() {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [showCompletedModal, setShowCompletedModal] = useState<boolean>(false)
     const [optimizationOptions, setOptimizationOptions] = useState(Array<DropdownOption>({ value: 'Genome' }))
     const [optimizationValue, setOptimizationValue] = useState<string>('Genome');
     const [swatches, setSwatches] = useState<Matrix.Grid>();
@@ -24,7 +22,6 @@ function App() {
         setOptimizationOptions(Options.map(item => { return { value: item.label } }))
 
         on<SwatchesCreatedEvent>('SWATCHES_CREATED', () => {
-            console.log("I can stop the LoadingView because everything is done...")
             setIsLoading(false)
         })
 
@@ -33,10 +30,6 @@ function App() {
     useEffect(() => {
         console.log("Swatches have been set ->", swatches)
     }, [swatches])
-
-    const handleShowCompletedModel = () => {
-        setShowCompletedModal(!showCompletedModal)
-    }
 
     const handleClosePlugin = () => {
         emit<ClosePluginEvent>("CLOSE_PLUGIN")
@@ -60,9 +53,7 @@ function App() {
     }
 
     const handleOptimizationChange = (event: JSX.TargetedEvent<HTMLInputElement>) => {
-        const newValue = event.currentTarget.value;
-        console.log(newValue);
-        setOptimizationValue(newValue);
+        setOptimizationValue(event.currentTarget.value);
     }
 
     const ImportView = () => {
@@ -81,9 +72,6 @@ function App() {
         )
 
         function FileUploadDropzoneContent() {
-
-            // const [optimizationValue, setOptimizationValue] = useState<string>('Genome');
-            // const [swatches, setSwatches] = useState<Matrix.Grid>();
 
             if (swatches) return RenderPreview(swatches, optimizationValue)
 
@@ -144,9 +132,7 @@ function App() {
 
     }
 
-    // Return rendered view
     return MainView()
-
 
 }
 

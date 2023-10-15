@@ -8,13 +8,6 @@ export const RenderPreview = (swatches: Matrix.Grid, optimization: string) => {
     if (!swatches) return
     const grid = Mapper.optimizeSwatches(swatches, optimization)
 
-    grid.columns.map(col => {
-        console.log(col)
-        col.rows.map(row => {
-            console.log(row.hex)
-        })
-    })
-
     return (
         <div>
             <Inline>
@@ -29,7 +22,6 @@ export const RenderPreview = (swatches: Matrix.Grid, optimization: string) => {
                 })}
             </Inline>
         </div>
-
     )
-
+    
 }
