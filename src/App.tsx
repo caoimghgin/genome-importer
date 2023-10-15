@@ -1,7 +1,7 @@
 
 import { h, JSX } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
-import { Button, Container, Inline, Stack, Text, Muted, Textbox, VerticalSpace, Dropdown, DropdownOption, TabsOption, Tabs, FileUploadDropzone, render } from '@create-figma-plugin/ui'
+import { Button, Container, Inline, Text, Muted, VerticalSpace, Dropdown, DropdownOption, TabsOption, Tabs, FileUploadDropzone, render } from '@create-figma-plugin/ui'
 import { emit, on } from '@create-figma-plugin/utilities'
 import { CreateSwatchesEvent, SwatchesCreatedEvent, ClosePluginEvent } from './events/handlers'
 import { SuccessModal } from './views/SuccessModal'
@@ -9,6 +9,7 @@ import { Options } from './genome/constants/weightedTargets'
 import { Mapper } from './genome/mapper'
 import { Matrix } from './genome/modules/SwatchMatrix'
 import { LoadingView } from './views/LoadingView'
+import { RenderPreview } from './views/RenderPreview'
 
 function App() {
 
@@ -19,8 +20,8 @@ function App() {
     const [swatches, setSwatches] = useState<Matrix.Grid>();
 
     useEffect(() => {
+
         setOptimizationOptions(Options.map(item => { return { value: item.label } }))
-        // on<SwatchesCreatedEvent>
 
         on<SwatchesCreatedEvent>('SWATCHES_CREATED', () => {
             console.log("I can stop the LoadingView because everything is done...")
@@ -43,7 +44,6 @@ function App() {
 
     const handleImportFile = async () => {
         const grid = Mapper.optimizeSwatches(swatches!, optimizationValue)
-        console.log("I should present LoadingView...")
         await setIsLoading(true)
         emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
     }
@@ -81,30 +81,23 @@ function App() {
         )
 
         function FileUploadDropzoneContent() {
-            if (!swatches) {
-                return (
-                    <Text align="center">
-                        <VerticalSpace space="extraLarge" />
-                        <VerticalSpace space="extraLarge" />
-                        <VerticalSpace space="extraLarge" />
-                        <Muted>Drag a gcm file or select to import</Muted>
-                        <VerticalSpace space="extraLarge" />
-                        <VerticalSpace space="extraLarge" />
-                        <VerticalSpace space="extraLarge" />
-                    </Text>
-                )
-            } else {
-                return (
-                    <div>
-                    <div>Create Preview...</div>
-                    <div>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vel nunc lacus. Donec quis leo ac tellus viverra interdum. Suspendisse a eros leo. Vivamus quis porttitor mauris, non sodales ante. Quisque sed congue nibh. Nunc euismod lacus odio, sed vulputate nunc posuere non. Nulla venenatis, ligula at posuere semper, dui nisi consequat arcu, ut imperdiet nibh lacus quis nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-                    </div>
-                    </div>
 
-                )
-            }
+            // const [optimizationValue, setOptimizationValue] = useState<string>('Genome');
+            // const [swatches, setSwatches] = useState<Matrix.Grid>();
 
+            if (swatches) return RenderPreview(swatches, optimizationValue)
+
+            return (
+                <Text align="center">
+                    <VerticalSpace space="extraLarge" />
+                    <VerticalSpace space="extraLarge" />
+                    <VerticalSpace space="extraLarge" />
+                    <Muted>Drag a gcm file or select to import</Muted>
+                    <VerticalSpace space="extraLarge" />
+                    <VerticalSpace space="extraLarge" />
+                    <VerticalSpace space="extraLarge" />
+                </Text>
+            )
         }
 
         function Footer() {
