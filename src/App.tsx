@@ -45,8 +45,6 @@ function App() {
         const grid = Mapper.optimizeSwatches(swatches!, optimizationValue)
         console.log("I should present LoadingView...")
         await setIsLoading(true)
-        // await new Promise(timer => setTimeout(timer, 100))
-
         emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
     }
 
@@ -68,32 +66,43 @@ function App() {
     }
 
     const ImportView = () => {
+        const acceptedFileTypes = ['application/json'];
         return (
             <Container space="medium">
                 {isLoading ? LoadingView() : null}
                 <VerticalSpace space="extraLarge" />
                 <Dropdown onChange={handleOptimizationChange} options={optimizationOptions} value={optimizationValue} variant="border" />
                 <VerticalSpace space="extraLarge" />
-                <FileUploadDropzone onSelectedFiles={handleSelectedFiles}>
+                <FileUploadDropzone acceptedFileTypes={acceptedFileTypes} onSelectedFiles={handleSelectedFiles}>
                     <Text align="center">
                         <VerticalSpace space="extraLarge" />
                         <VerticalSpace space="extraLarge" />
                         <VerticalSpace space="extraLarge" />
-                        <Muted>Text</Muted>
+                        <Muted>Drag a gcm file or select to import</Muted>
                         <VerticalSpace space="extraLarge" />
                         <VerticalSpace space="extraLarge" />
                         <VerticalSpace space="extraLarge" />
                     </Text>
                 </FileUploadDropzone>
-                <VerticalSpace space="extraLarge" />
-                <Stack space="medium">
-                    <Inline space="small">
-                        { swatches ? <Button onClick={handleImportFile}>Create</Button> : <Button disabled onClick={handleImportFile}>Create</Button>} 
-                        <Button onClick={handleClosePlugin} secondary>Cancel</Button>
-                    </Inline>
-                </Stack>
+                {isLoading ? null : Footer()}
             </Container>
         )
+
+        function Footer() {
+            return (
+                <div style={{ position: "fixed", left: "0", bottom: "0", width: "100%", height: "56px" }}>
+                    <hr style={{ color: '#E2E2E2', backgroundColor: '#E2E2E2', borderColor: '#E2E2E2', height: 0.5 }} />
+                    <div style={{ padding: "11px 16px 5px 16px" }}>
+                        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                            <Inline space="small">
+                                <Button onClick={handleClosePlugin} secondary>Cancel</Button>
+                                {swatches ? <Button onClick={handleImportFile}>Import</Button> : <Button disabled onClick={handleImportFile}>Import</Button>}
+                            </Inline>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
     }
 
     const OptionsView = () => {
