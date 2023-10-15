@@ -1,5 +1,7 @@
 import { Matrix } from '../modules/SwatchMatrix';
 import { SwatchMapModel } from '../models/SwatchMapModel';
+import { Options } from '../constants/weightedTargets';
+import { WeightedTargets } from '../constants/weightedTargets';
 
 export const removeUndefinedWeightSwatches = (grid: Matrix.Grid) => {
     const result = {...grid}
@@ -57,8 +59,67 @@ export const mapSwatchesToTarget = (grid: Matrix.Grid, mapper: SwatchMapModel) =
         });
     });
 
-    return result;
+    return matrixGridCleaner(result);
 };
+
+export const optimizeSwatches = (grid: Matrix.Grid, optimizationValue: string) => {
+
+    const result = {...grid}
+
+    const optimization = Options.find(item => item.label === optimizationValue)?.value
+    const index = optimization ? parseInt(optimization) : 0
+    const mapModel = new SwatchMapModel(WeightedTargets(index))
+
+    result.columns.forEach(function (column) {
+        let neutralTargets = column.rows[12].isNeutral;
+        let targets = mapModel.newTargets(neutralTargets);
+
+        column.rows.forEach(function (row, index) {
+            row.weight = undefined;
+            if (targets.includes(row.l_target)) {
+                row.weight = mapModel.weights()[index];
+            }
+        });
+
+        //
+        // The pinned may not slot neatly into the L*5 matrix. If defined
+        // swatch is not present, then insert into matrix, replacing for closest match.
+        //
+        column.rows.filter((swatch) => {
+            if (swatch.isPinned === true && swatch.weight === undefined) {
+                let index = getClosestIndex(swatch, targets);
+                // need to test if a .isUserDefined is in the slot!
+                let testing = column.rows[index];
+                if (testing.isUserDefined == false) {
+                    swatch.weight = column.rows[index].weight;
+                    column.rows[index].weight = undefined;
+                }
+            }
+        });
+
+        //
+        // The userDefinedSwatch may not slot neatly into the L*5 matrix. If defined
+        // swatch is not present, then insert into matrix, replacing for closest match.
+        //
+        column.rows.filter((swatch) => {
+            if (swatch.isUserDefined === true && swatch.weight === undefined) {
+                let index = getClosestIndex(swatch, targets);
+                swatch.weight = column.rows[index].weight;
+                column.rows[index].weight = undefined;
+            }
+        });
+    });
+
+    return matrixGridCleaner(result);
+};
+
+const matrixGridCleaner = (grid: Matrix.Grid) => {
+    const result = grid.columns.map(col => {
+        const rows = col.rows.map(row => row).filter(swatch => Boolean(swatch.weight))
+        return { semantic: col.semantic, rows: rows}
+    })
+    return {columns: result}
+}
 
 export const getClosestIndex = (swatch: Matrix.Swatch, targets: Array<any>) => {
     

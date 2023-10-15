@@ -3,22 +3,18 @@ import { h, JSX } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 import { Button, Container, Inline, Stack, Text, Muted, Textbox, VerticalSpace, Dropdown, DropdownOption, TabsOption, Tabs, FileUploadDropzone, render } from '@create-figma-plugin/ui'
 import { emit, on } from '@create-figma-plugin/utilities'
-import { CreateSwatchesEvent, RectanglesCreatedEvent, ClosePluginEvent } from './events/handlers'
+import { CreateSwatchesEvent, ClosePluginEvent } from './events/handlers'
 import { SuccessModal } from './views/SuccessModal'
 import { Options } from './genome/constants/weightedTargets'
 import { Mapper } from './genome/mapper'
 import { Matrix } from './genome/modules/SwatchMatrix'
-import { WeightedTargets } from './genome/constants/weightedTargets'
-import { SwatchMapModel } from './genome/models/SwatchMapModel'
 
 function App() {
 
-    const [count, setCount] = useState<string>("5")
     const [showCompletedModal, setShowCompletedModal] = useState<boolean>(false)
     const [optimizationOptions, setOptimizationOptions] = useState(Array<DropdownOption>({ value: 'Genome' }))
     const [optimizationValue, setOptimizationValue] = useState<string>('Genome');
     const [swatches, setSwatches] = useState<Matrix.Grid>();
-    const [foo, setFoo] = useState<Matrix.Grid>();
 
     useEffect(() => {
         setOptimizationOptions(Options.map(item => { return { value: item.label } }))
@@ -37,94 +33,9 @@ function App() {
     }
 
     const handleImportFile = () => {
-        createModel()
-
-
-
-
-        // //
-        // // This is doing too much. 
-        // //
-        // const optimization = Options.find(item => item.label === optimizationValue)?.value
-        // const index = optimization ? parseInt(optimization) : 0
-        // const mapModel = new SwatchMapModel(WeightedTargets(index))
-        // if (swatches && mapModel) {
-        //     let grid = Mapper.mapSwatchesToTarget(swatches, mapModel)
-        //     grid = Mapper.removeUndefinedWeightSwatches(grid)
-        //     console.log(grid)
-        //     // emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
-        // }
+        const grid = Mapper.optimizeSwatches(swatches!, optimizationValue)
+        emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
     }
-
-    const createModel = () => {
-
-        console.log("SWATCHES", swatches!)
-        console.log("ONCE SWATCHES ARE SET, THE SHOULD NEVER CHANGE....")
-
-        const optimization = Options.find(item => item.label === optimizationValue)?.value
-        const index = optimization ? parseInt(optimization) : 0
-        const mapModel = new SwatchMapModel(WeightedTargets(index))
-        const grid = Mapper.mapSwatchesToTarget(swatches!, mapModel)
-        console.log("grid (1)", grid)
-
-        const foo = grid.columns.map(col => {
-            const rows = col.rows.map(row => row).filter(swatch => Boolean(swatch.weight))
-            return { semantic: col.semantic, rows: rows}
-        })
-
-        // console.log("MIGhtY FOOoo XXX!", {columns: foo})
-        emit<CreateSwatchesEvent>('CREATE_SWATCHES', {columns: foo})
-
-        // let epic = new Matrix.Grid()
-        // epic = swatches!
-        // console.log("My EPIC", epic)
-        // const optimization = Options.find(item => item.label === optimizationValue)?.value
-        // const index = optimization ? parseInt(optimization) : 0
-        // const mapModel = new SwatchMapModel(WeightedTargets(index))
-        // console.log("mapModel", mapModel!)
-        // const kdkdk = Mapper.mapSwatchesToTarget(swatches!, mapModel)
-        // let grid = {...kdkdk}
-        // console.log("grid (1)", grid)
-        // grid = Mapper.removeUndefinedWeightSwatches({...grid})
-        // // // I'd like to set this to a setState variable, I think....
-        // console.log("grid (2)", grid)
-        // // emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
-
-
-
-  
-        // const xxx = grid.columns.map(col => {
-        //     const row = col.rows.map(row => row).filter(swatch => Boolean(swatch.weight))
-        //     return col
-        //     return col.rows = row
-        // })
-        // //{semantic: 'primary', rows: Array(14)}
-        // console.log("MIGhtY FOOoo XXX!", {columns: xxx})
-
-        //
-        // A New Hope
-        //
-        // const foo = grid.columns.map(col => {
-        //     return col.rows.map(row => row).filter(swatch => Boolean(swatch.weight))
-        // })
-        // const bar = grid.columns.map(col => col.rows = [])
-        // console.log("MIGhtY FOOoo!", foo)
-        // emit<CreateSwatchesEvent>('CREATE_SWATCHES', foo)
-
-    }
-
-
-    // export const removeUndefinedWeightSwatches = (grid: Matrix.Grid) => {
-    //     const result = {...grid}
-    //     result.columns.forEach(function (column, index) {
-    //         let weightOptimizedSwatches = column.rows.filter((swatch) => {
-    //             return swatch.weight !== undefined;
-    //         });
-    //         result.columns[index].rows = weightOptimizedSwatches;
-    //     });
-    
-    //     return result;
-    // };
 
     const handleSelectedFiles = (files: Array<File>) => {
         const fileReader = new FileReader()
@@ -167,7 +78,6 @@ function App() {
                         <Button onClick={handleClosePlugin} secondary>Cancel</Button>
                     </Inline>
                 </Stack>
-                <SuccessModal message={count} show={showCompletedModal} toggle={handleShowCompletedModel} complete={handleClosePlugin} />
             </Container>
         )
     }
