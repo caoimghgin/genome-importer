@@ -74,6 +74,15 @@ function App() {
                 <Dropdown onChange={handleOptimizationChange} options={optimizationOptions} value={optimizationValue} variant="border" />
                 <VerticalSpace space="extraLarge" />
                 <FileUploadDropzone acceptedFileTypes={acceptedFileTypes} onSelectedFiles={handleSelectedFiles}>
+                    {FileUploadDropzoneContent()}
+                </FileUploadDropzone>
+                {isLoading ? null : Footer()}
+            </Container>
+        )
+
+        function FileUploadDropzoneContent() {
+            if (!swatches) {
+                return (
                     <Text align="center">
                         <VerticalSpace space="extraLarge" />
                         <VerticalSpace space="extraLarge" />
@@ -83,10 +92,20 @@ function App() {
                         <VerticalSpace space="extraLarge" />
                         <VerticalSpace space="extraLarge" />
                     </Text>
-                </FileUploadDropzone>
-                {isLoading ? null : Footer()}
-            </Container>
-        )
+                )
+            } else {
+                return (
+                    <div>
+                    <div>Create Preview...</div>
+                    <div>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vel nunc lacus. Donec quis leo ac tellus viverra interdum. Suspendisse a eros leo. Vivamus quis porttitor mauris, non sodales ante. Quisque sed congue nibh. Nunc euismod lacus odio, sed vulputate nunc posuere non. Nulla venenatis, ligula at posuere semper, dui nisi consequat arcu, ut imperdiet nibh lacus quis nisi. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                    </div>
+                    </div>
+
+                )
+            }
+
+        }
 
         function Footer() {
             return (
