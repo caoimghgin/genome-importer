@@ -1,7 +1,7 @@
 
 import { h, JSX } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
-import { Button, Container, Inline, Text, Muted, VerticalSpace, Dropdown, DropdownOption, TabsOption, Tabs, FileUploadDropzone, render } from '@create-figma-plugin/ui'
+import { Button, Container, Inline, Text, Muted, VerticalSpace, Dropdown, DropdownOption, TabsOption, Tabs, FileUploadDropzone, Columns, IconPlus32, render } from '@create-figma-plugin/ui'
 import { emit, on } from '@create-figma-plugin/utilities'
 import { CreateSwatchesEvent, SwatchesCreatedEvent, ClosePluginEvent } from './events/handlers'
 import { Options } from './genome/constants/weightedTargets'
@@ -93,12 +93,15 @@ function App() {
                 <div style={{ position: "fixed", left: "0", bottom: "0", width: "100%", height: "56px" }}>
                     <hr style={{ color: '#E2E2E2', backgroundColor: '#E2E2E2', borderColor: '#E2E2E2', height: 0.5 }} />
                     <div style={{ padding: "11px 16px 5px 16px" }}>
-                        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                            <Inline space="small">
-                                <Button onClick={handleClosePlugin} secondary>Cancel</Button>
-                                {swatches ? <Button onClick={handleImportFile}>Import</Button> : <Button disabled onClick={handleImportFile}>Import</Button>}
-                            </Inline>
-                        </div>
+                        <Columns>
+                            <a href='https://www.genomecolor.space/' target='_blank' rel='noopener noreferrer'><IconPlus32 /></a>
+                            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                                <Inline space="small">
+                                    <Button onClick={handleClosePlugin} secondary>Cancel</Button>
+                                    {swatches ? <Button onClick={handleImportFile}>Import</Button> : <Button disabled onClick={handleImportFile}>Import</Button>}
+                                </Inline>
+                            </div>
+                        </Columns>
                     </div>
                 </div>
             )

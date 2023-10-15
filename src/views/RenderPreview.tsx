@@ -15,7 +15,11 @@ export const RenderPreview = (swatches: Matrix.Grid, optimization: string) => {
                     return (
                         <div style={{ display: "block" }}>
                             {col.rows.map(row => {
-                                return <div style={{ backgroundColor: row.hex, height: 10, width: 30 }} />
+                                const color = row.WCAG2_W_45 || row.WCAG2_W_30 ? '#FFF' : '#000'
+                                let symbol = "-"
+                                if (row.isUserDefined) symbol = "•"
+                                if (row.isPinned) symbol = "|"
+                                return <div style={{ backgroundColor: row.hex, color: color, height: 16, width: 42 }}>{symbol}</div>
                             })}
                         </div>
                     )
