@@ -67,20 +67,37 @@ function App() {
                 <FileUploadDropzone acceptedFileTypes={acceptedFileTypes} onSelectedFiles={handleSelectedFiles}>
                     {FileUploadDropzoneContent()}
                 </FileUploadDropzone>
+                {swatches ? optimizationMessage() : null}
                 {isLoading ? null : Footer()}
             </Container>
         )
 
+        function optimizationMessage() {
+            return (
+                <Container space='large'>
+                    <VerticalSpace space="large" />
+                    <Text align="left">The <b>Genome</b> optimization does things nothing else can. I'll tell you things about this optimization...</Text>
+                </Container>
+            )
+        }
+
         function FileUploadDropzoneContent() {
-
             if (swatches) return RenderPreview(swatches, optimizationValue)
-
             return (
                 <Text align="center">
                     <VerticalSpace space="extraLarge" />
                     <VerticalSpace space="extraLarge" />
                     <VerticalSpace space="extraLarge" />
-                    <Muted>Drag a gcm file or select to import</Muted>
+                    <VerticalSpace space="extraLarge" />
+                    <VerticalSpace space="extraLarge" />
+                    <VerticalSpace space="extraLarge" />
+                    <VerticalSpace space="extraLarge" />
+                    <Muted>Drag a gcm.json file or select to import</Muted>
+                    <VerticalSpace space="extraLarge" />
+                    <VerticalSpace space="extraLarge" />
+                    <VerticalSpace space="extraLarge" />
+                    <VerticalSpace space="extraLarge" />
+                    <VerticalSpace space="extraLarge" />
                     <VerticalSpace space="extraLarge" />
                     <VerticalSpace space="extraLarge" />
                     <VerticalSpace space="extraLarge" />
