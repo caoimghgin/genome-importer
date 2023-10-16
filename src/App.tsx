@@ -9,6 +9,7 @@ import { Mapper } from './genome/mapper'
 import { Matrix } from './genome/modules/SwatchMatrix'
 import { LoadingView } from './views/LoadingView'
 import { RenderPreview } from './views/RenderPreview'
+import { OptimizationMessage } from './views/OptimizationMessage'
 
 function App() {
 
@@ -67,19 +68,19 @@ function App() {
                 <FileUploadDropzone acceptedFileTypes={acceptedFileTypes} onSelectedFiles={handleSelectedFiles}>
                     {FileUploadDropzoneContent()}
                 </FileUploadDropzone>
-                {swatches ? optimizationMessage() : null}
+                {swatches ? OptimizationMessage(optimizationValue) : null}
                 {isLoading ? null : Footer()}
             </Container>
         )
 
-        function optimizationMessage() {
-            return (
-                <Container space='large'>
-                    <VerticalSpace space="large" />
-                    <Text align="left">The <b>Genome</b> optimization does things nothing else can. I'll tell you things about this optimization...</Text>
-                </Container>
-            )
-        }
+        // function optimizationMessage() {
+        //     return (
+        //         <Container space='large'>
+        //             <VerticalSpace space="large" />
+        //             <Text align="left">The <b>Genome</b> optimization does things nothing else can. I'll tell you things about this optimization...</Text>
+        //         </Container>
+        //     )
+        // }
 
         function FileUploadDropzoneContent() {
             if (swatches) return RenderPreview(swatches, optimizationValue)
