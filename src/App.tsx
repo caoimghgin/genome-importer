@@ -14,8 +14,8 @@ import { OptimizationMessage } from './views/OptimizationMessage'
 function App() {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [optimizationOptions, setOptimizationOptions] = useState(Array<DropdownOption>({ value: 'Genome' }))
-    const [optimizationValue, setOptimizationValue] = useState<string>('Genome');
+    const [optimizationOptions, setOptimizationOptions] = useState(Array<DropdownOption>({ value: 'Genome v2' }))
+    const [optimizationValue, setOptimizationValue] = useState<string>('Genome v2');
     const [swatches, setSwatches] = useState<Matrix.Grid>();
 
     useEffect(() => {
@@ -72,15 +72,6 @@ function App() {
                 {isLoading ? null : Footer()}
             </Container>
         )
-
-        // function optimizationMessage() {
-        //     return (
-        //         <Container space='large'>
-        //             <VerticalSpace space="large" />
-        //             <Text align="left">The <b>Genome</b> optimization does things nothing else can. I'll tell you things about this optimization...</Text>
-        //         </Container>
-        //     )
-        // }
 
         function FileUploadDropzoneContent() {
             if (swatches) return RenderPreview(swatches, optimizationValue)

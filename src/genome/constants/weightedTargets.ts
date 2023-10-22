@@ -3,6 +3,7 @@ import { antOptimization } from "../optimizations/ant";
 import { carbonOptimization } from "../optimizations/carbon";
 import { colorBoxOptimization } from "../optimizations/colorBox";
 import { genomeOptimization } from "../optimizations/genome";
+import { genomeOptimization_v2 } from "../optimizations/genome_v2";
 import { lightningOptimization } from "../optimizations/lightning";
 import { materialOptimization } from "../optimizations/material";
 import { newsKitOptimization } from "../optimizations/newsKit";
@@ -20,20 +21,22 @@ export type weightedTargetsColumn = {
 };
 
 export const Options = [
-    {value: '0', label: 'Non-optimized', message: ''},
-    {value: '1', label: 'Genome', message: ''},
-    {value: '2', label: 'IBM Carbon', message: ''},
-    {value: '3', label: 'SalesForce Lightning', message: ''},
-    {value: '4', label: 'Adobe Spectrum', message: ''},
-    {value: '5', label: 'Ant', message: ''},
-    {value: '6', label: 'Material', message: ''},
-    {value: '7', label: 'Accessible Palette', message: ''},
-    {value: '8', label: 'ColorBox', message: ''},
+    { value: '0', label: 'Non-optimized', message: '' },
+    { value: '1', label: 'Genome', message: '' },
+    { value: '2', label: 'Genome v2', message: '' },
+    { value: '3', label: 'IBM Carbon', message: '' },
+    { value: '4', label: 'SalesForce Lightning', message: '' },
+    { value: '5', label: 'Adobe Spectrum', message: '' },
+    { value: '6', label: 'Ant', message: '' },
+    { value: '7', label: 'Material', message: '' },
+    { value: '8', label: 'Accessible Palette', message: '' },
+    { value: '9', label: 'ColorBox', message: '' },
 ];
 
 enum WeightedTargetsOptions {
     Base = 0,
     Genome,
+    Genome2,
     Carbon,
     Lightning,
     AdobeSpectrum,
@@ -61,6 +64,8 @@ export const WeightedTargets = (index: WeightedTargetsOptions): weightedTargetsC
             return colorBoxOptimization;
         case WeightedTargetsOptions.Genome:
             return genomeOptimization;
+        case WeightedTargetsOptions.Genome2:
+            return genomeOptimization_v2;
         case WeightedTargetsOptions.Material:
             return materialOptimization;
         default:
