@@ -3,7 +3,7 @@ import { Matrix } from "../../genome/modules/SwatchMatrix";
 import { emit } from "@create-figma-plugin/utilities";
 import { SwatchesCreatedEvent } from "../../events/handlers";
 
-const rootName = 'palette' as String;
+let rootName = 'palette'
 const swatchWidth = 140;
 const swatchHeight = 44;
 
@@ -15,11 +15,14 @@ const swatchHeight = 44;
 
 export const createSwatches = async (grid: Matrix.Grid) => {
     loadFonts().then(() => {
-        if (!paintStyleExists(grid)) {
-            populateFigmaColorStyles(grid)
-        } else {
-            updateFigmaColorStyles(grid);
-        }
+        createRootName()
+        populateFigmaColorStyles(grid)
+
+        // if (!paintStyleExists(grid)) {
+        //     populateFigmaColorStyles(grid)
+        // } else {
+        //     updateFigmaColorStyles(grid);
+        // }
         figma.closePlugin()
         // emit<SwatchesCreatedEvent>("SWATCHES_CREATED")
         // emit<ClosePluginEvent>("CLOSE_PLUGIN")
@@ -246,4 +249,41 @@ const loadFonts = async () => {
 
 const localPaintStyleNames = () => {
     return figma.getLocalPaintStyles().map((style) => style.name);
+}
+
+const localPaintStyleRootNames = () => {
+    const rootNames = figma.getLocalPaintStyles().map(style => style.name.split("/")[0])
+    return [...new Set(rootNames)]
+}
+
+const createRootName = () => {
+
+    // If we don't want to override existing paint styles...
+
+
+    // [...new Set(a)];
+
+    const localRootNames = localPaintStyleRootNames()
+    console.log(localRootNames)
+
+    if (localRootNames.includes(rootName)) {
+        let unique = 0
+        while(true) {
+            unique = unique+1
+            if(!localRootNames.includes(`${rootName}_${unique}`)) {
+                rootName = `${rootName}_${unique}`
+                break;
+            }
+        }
+    }
+
+
+
+
+
+    // let needCreate = false
+
+    // if (needCreate) {
+    //     rootName = `${rootName}_01`
+    // }
 }
