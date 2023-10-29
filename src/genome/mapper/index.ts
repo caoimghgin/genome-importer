@@ -110,6 +110,8 @@ export const optimizeSwatches = (grid: Matrix.Grid, optimizationValue: string) =
         });
     });
 
+    // {optimization: optimizationValue, result}
+    result.optimization = optimizationValue
     return matrixGridCleaner(result);
 };
 
@@ -118,7 +120,7 @@ const matrixGridCleaner = (grid: Matrix.Grid) => {
         const rows = col.rows.map(row => row).filter(swatch => Boolean(swatch.weight))
         return { semantic: col.semantic, rows: rows}
     })
-    return {columns: result}
+    return {optimization:grid.optimization, columns: result}
 }
 
 export const getClosestIndex = (swatch: Matrix.Swatch, targets: Array<any>) => {

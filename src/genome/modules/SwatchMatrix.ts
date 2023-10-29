@@ -1,5 +1,6 @@
 export module Matrix {
     export class Grid {
+        optimization: String = "";
         columns: Column[] = [];
     }
 

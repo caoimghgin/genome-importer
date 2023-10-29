@@ -16,7 +16,7 @@ function App() {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [optimizationOptions, setOptimizationOptions] = useState(Array<DropdownOption>({ value: 'Genome v2' }))
     const [optimizationValue, setOptimizationValue] = useState<string>('Genome v2');
-    const [swatches, setSwatches] = useState<Matrix.Grid>();
+    const [gridModel, setGridModel] = useState<Matrix.Grid>();
 
     useEffect(() => {
 
@@ -29,15 +29,15 @@ function App() {
     }, [])
 
     useEffect(() => {
-        console.log("Swatches have been set ->", swatches)
-    }, [swatches])
+        console.log(gridModel)
+    }, [gridModel])
 
     const handleClosePlugin = () => {
         emit<ClosePluginEvent>("CLOSE_PLUGIN")
     }
 
     const handleImportFile = async () => {
-        const grid = Mapper.optimizeSwatches(swatches!, optimizationValue)
+        const grid = Mapper.optimizeSwatches(gridModel!, optimizationValue)
         await setIsLoading(true)
         emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
     }
@@ -48,7 +48,7 @@ function App() {
         fileReader.onload = (event) => {
             if (event && event.target) {
                 // @ts-ignore
-                setSwatches(JSON.parse(event.target.result) as Matrix.Grid)
+                setGridModel(JSON.parse(event.target.result) as Matrix.Grid)
             }
         }
     }
@@ -68,13 +68,13 @@ function App() {
                 <FileUploadDropzone acceptedFileTypes={acceptedFileTypes} onSelectedFiles={handleSelectedFiles}>
                     {FileUploadDropzoneContent()}
                 </FileUploadDropzone>
-                {swatches ? OptimizationMessage(optimizationValue) : null}
+                {gridModel ? OptimizationMessage(optimizationValue) : null}
                 {isLoading ? null : Footer()}
             </Container>
         )
 
         function FileUploadDropzoneContent() {
-            if (swatches) return RenderPreview(swatches, optimizationValue)
+            if (gridModel) return RenderPreview(gridModel, optimizationValue)
             return (
                 <Text align="center">
                     <VerticalSpace space="extraLarge" />
@@ -107,7 +107,7 @@ function App() {
                             <div style={{ display: "flex", justifyContent: "flex-end" }}>
                                 <Inline space="small">
                                     <Button onClick={handleClosePlugin} secondary>Cancel</Button>
-                                    {swatches ? <Button onClick={handleImportFile}>Import</Button> : <Button disabled onClick={handleImportFile}>Import</Button>}
+                                    {gridModel ? <Button onClick={handleImportFile}>Import</Button> : <Button disabled onClick={handleImportFile}>Import</Button>}
                                 </Inline>
                             </div>
                         </Columns>
