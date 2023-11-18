@@ -12,6 +12,11 @@ export const createSwatches = async (grid: Matrix.Grid) => {
 
     loadFonts().then(() => {
 
+        //
+        // PROBLEMS
+        //
+        // Need non-blocking async awaits for Figma calls.
+        //
 
         //
         // User scenarios
@@ -23,28 +28,19 @@ export const createSwatches = async (grid: Matrix.Grid) => {
         //      c) Update labels if palette drawn on page
         //
 
+        // @ts-ignore
         if (render === "CREATE") {
-            createPalette(grid)
+            createRootName()
+            createFigmaColorStyles(grid)
+            createPaletteSwatches(grid)
+        // @ts-ignore
+        } else if (render === "UPDATE") {
+            updateFigmaColorStyles(grid)
         }
-        // createRootName()
-        // createFigmaColorStyles(grid)
-        // createPaletteSwatches(grid)
-
-        // if (!paintStyleExists(grid)) {
-        //     populateFigmaColorStyles(grid)
-        // } else {
-        //     updateFigmaColorStyles(grid);
-        // }
 
         figma.closePlugin()
 
     })
-}
-
-const createPalette = (grid: Matrix.Grid) => {
-    createRootName()
-    createFigmaColorStyles(grid)
-    createPaletteSwatches(grid)
 }
 
 const createPaletteSwatches = (matrix: Matrix.Grid) => {
@@ -69,8 +65,14 @@ const createPaletteSwatches = (matrix: Matrix.Grid) => {
         offsetY = 0;
     })
     
+    const frame = figma.createFrame()
+    frame.resize(1600, 800);
+    frame.x = -32
+    frame.y = -90
+    figma.group(nodes, frame)
+
     // @ts-ignore
-    figma.currentPage.selection = nodes;
+    // figma.currentPage.selection = nodes;
     figma.viewport.scrollAndZoomIntoView(nodes);
 }
 
@@ -221,7 +223,7 @@ const createSwatchLabel = (swatch: Matrix.Swatch) => {
     return result;
 }
 
-const createPaintStyle = (swatch: Matrix.Swatch) => {
+const createPaintStyle = async (swatch: Matrix.Swatch) => {
 
     //
     // Maybe check to see if the painStyle exists before 

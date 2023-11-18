@@ -9,7 +9,7 @@ export default function () {
     showUI({ height: 660, width: 500 })
 
     on<CreateSwatchesEvent>('CREATE_SWATCHES', async (grid) => {
-        createSwatches(grid)
+        await createSwatches(grid)
     })
 
     on<CreateRectanglesEvent>('CREATE_RECTANGLES', (count) => {
