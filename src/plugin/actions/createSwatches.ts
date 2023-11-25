@@ -1,8 +1,5 @@
 import { Matrix } from "../../genome/modules/SwatchMatrix";
-import { emit } from "@create-figma-plugin/utilities";
-import { SwatchesCreatedEvent } from "../../events/handlers";
-import { SwatchModel } from "../../genome/models/SwatchModel";
-import { makePaletteVariables } from "./makePaletteVariables";
+import { createPaletteVariables } from "./createPaletteVariables";
 import chroma from "chroma-js";
 
 const render = "CREATE_VARIABLES"
@@ -47,7 +44,7 @@ export const createSwatches = async (grid: Matrix.Grid) => {
                     // @ts-ignore
         } else if (render === "CREATE_VARIABLES") {
             // createRootName()
-            makePaletteVariables(grid, false)
+            createPaletteVariables(grid, false)
             // createContextualVariables()
         } else if (render === "UPDATE_VARIABLES") {
             localVariables = figma.variables.getLocalVariables("COLOR")

@@ -1,7 +1,7 @@
 import { showUI, on, emit } from '@create-figma-plugin/utilities'
 import { ClosePluginEvent, CreateSwatchesEvent, CreateRectanglesEvent, RectanglesCreatedEvent } from '../events/handlers'
-import { createRectangles } from './utilities/createRectangles'
-import { createSwatches } from './utilities/createSwatches'
+import { createRectangles } from './actions/createRectangles'
+import { createSwatches } from './actions/createSwatches'
 
 export default function () {
 
