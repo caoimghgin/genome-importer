@@ -5,11 +5,11 @@ import { updatePaletteVariables } from "../utilities/updateColorVariable";
 import { blackSwatch, whiteSwatch, paletteCollectionName, isGenomeOptimization } from "../constants";
 
 export const createPaletteVariables = async (grid: Matrix.Grid, update:boolean) => {
-    if (update) {
-        refreshPaletteVariables(grid)
-    } else {
-        makePaletteVariables(grid) 
-    }
+
+    // 1) if update === true, do we have all the things we need to update in Figma?
+    // isUpdatable? (are you dancible?)
+
+    update ? refreshPaletteVariables(grid) : makePaletteVariables(grid) 
 }
 
 const refreshPaletteVariables = (grid: Matrix.Grid) => {
