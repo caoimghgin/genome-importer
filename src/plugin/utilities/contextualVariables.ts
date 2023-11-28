@@ -1,8 +1,19 @@
 let localVariables: Variable[] = []
 
-export const createContextualVariables = () => {
-    localVariables = figma.variables.getLocalVariables("COLOR")
-    const collection = createContextualVariableCollection();
+const dataType = "COLOR"
+const collectionTitle = "contextual"
+const darkModeTitle = "dark"
+const lightModeTitle = "light"
+
+export const contextualVariables = (update: Boolean) => {
+
+    if (update) {
+        console.log("TBD! I don't have an update routine for contextual variables")
+        return
+    }
+
+    localVariables = figma.variables.getLocalVariables(dataType)
+    const collection = createContextualVariableCollection()
 
     createContextualVariable(collection, "paper/~/pp", ["neutral/025", "neutral/900"])
     createContextualVariable(collection, "paper/~/p", ["neutral/015", "neutral/925"])
@@ -26,10 +37,26 @@ export const createContextualVariables = () => {
     createContextualVariable(collection, "paint/~/secondary", ["neutral/400", "neutral/300"])
     createContextualVariable(collection, "paint/~/info", ["info/400", "info/300"])
     createContextualVariable(collection, "paint/~/highlight", ["highlight/075", "highlight/075"])
-    createContextualVariable(collection, "paint/~/transparent", ["alpha/transparent/~", "alpha/transparent/~"])
+
+    createContextualVariable(collection, "paint/chromatic/primary/active", ["primary/600", "primary/500"])
+    createContextualVariable(collection, "paint/chromatic/primary/hover", ["primary/300", "primary/200"])
+    createContextualVariable(collection, "paint/chromatic/primary/disabled", ["primary/085", "primary/800"])
+
+    createContextualVariable(collection, "paint/chromatic/secondary/active", ["neutral/050", "neutral/900"])
+    createContextualVariable(collection, "paint/chromatic/secondary/hover", ["neutral/025", "neutral/800"])
+    createContextualVariable(collection, "paint/chromatic/secondary/disabled", ["neutral/400", "neutral/400"])
+
+    createContextualVariable(collection, "paint/chromatic/positive/active", ["positive/600", "positive/500"])
+    createContextualVariable(collection, "paint/chromatic/positive/hover", ["positive/300", "positive/200"])
+    createContextualVariable(collection, "paint/chromatic/positive/disabled", ["positive/085", "positive/800"])
+
+    createContextualVariable(collection, "paint/chromatic/negative/active", ["negative/600", "negative/500"])
+    createContextualVariable(collection, "paint/chromatic/negative/hover", ["negative/300", "negative/200"])
+    createContextualVariable(collection, "paint/chromatic/negative/disabled", ["negative/085", "negative/800"])
 
     createContextualVariable(collection, "stamp/~/white", ["neutral/000", "neutral/000"])
     createContextualVariable(collection, "stamp/~/black", ["neutral/950", "neutral/950"])
+    createContextualVariable(collection, "stamp/~/transparent", ["alpha/transparent/~", "alpha/transparent/~"])
 
 }
 
@@ -46,13 +73,13 @@ const createContextualVariable = (collection: VariableCollection, contextual: st
 }
 
 const createVariable = (name: string, collection: VariableCollection) => {
-    return figma.variables.createVariable(name, collection.id, "COLOR")
+    return figma.variables.createVariable(name, collection.id, dataType)
 }
 
 const createContextualVariableCollection = () => {
-    const result = figma.variables.createVariableCollection("contextual");
-    result.renameMode(result.modes[0].modeId, "Light")
-    result.addMode("Dark")
+    const result = figma.variables.createVariableCollection(collectionTitle);
+    result.renameMode(result.modes[0].modeId, lightModeTitle)
+    result.addMode(darkModeTitle)
     return result
 }
 

@@ -1,8 +1,9 @@
 import { Matrix } from "../../genome/modules/SwatchMatrix";
-import { createPaletteVariables } from "./createPaletteVariables";
-import { createContextualVariables } from "../utilities/createContextualVariables";
+import { paletteVariables } from "./paletteVariables";
+import { createPaletteStyles } from "./createPaletteStyles";
+import { contextualVariables } from "../utilities/contextualVariables";
 
-const render = "CREATE_VARIABLES"
+const render = "UPDATE_VARIABLES"
 
 let rootName = 'palette'
 const swatchWidth = 140;
@@ -36,7 +37,7 @@ export const createSwatches = async (grid: Matrix.Grid) => {
         // @ts-ignore
         if (render === "CREATE_STYLES") {
             createRootName()
-            createPaletteStyles(grid)
+            createPaletteStyles(grid, false)
             createPaletteSwatches(grid)
                     // @ts-ignore
         } else if (render === "UPDATE_STYLES") {
@@ -44,8 +45,8 @@ export const createSwatches = async (grid: Matrix.Grid) => {
                     // @ts-ignore
         } else if (render === "CREATE_VARIABLES") {
             // createRootName()
-            createPaletteVariables(grid, false)
-            createContextualVariables()
+            paletteVariables(grid, false)
+            contextualVariables(false)
         } else if (render === "UPDATE_VARIABLES") {
             localVariables = figma.variables.getLocalVariables("COLOR")
             updatePaletteVariables(grid)
@@ -103,7 +104,7 @@ const createPaletteSwatches = (matrix: Matrix.Grid) => {
     figma.viewport.scrollAndZoomIntoView(nodes);
 }
 
-function createPaletteStyles(grid: Matrix.Grid) {
+function XXXcreatePaletteStyles(grid: Matrix.Grid) {
 
     let matrix = JSON.parse(JSON.stringify(grid)) as Matrix.Grid
 

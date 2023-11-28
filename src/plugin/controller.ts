@@ -1,30 +1,48 @@
 import { showUI, on, emit } from '@create-figma-plugin/utilities'
-import { ClosePluginEvent, CreateSwatchesEvent, CreateRectanglesEvent, RectanglesCreatedEvent } from '../events/handlers'
-import { createRectangles } from './actions/createRectangles'
-import { createSwatches } from './actions/createSwatches'
+import { ClosePluginEvent, CreateSwatchesEvent } from '../events/handlers'
+// import { createSwatches } from './actions/createSwatches'
+import { paletteVariables } from './actions/paletteVariables'
+import { contextualVariables } from './utilities/contextualVariables'
+import { createPaletteStyles } from './actions/createPaletteStyles'
+import { renderPalette } from './actions/renderPalette'
+import { renderPaletteVariables } from './actions/renderPaletteVariables'
+
+const props = { type: "VARIABLES", categories: ["PALETTE", "CONTEXTUAL", "DRAW"], update: false }
 
 export default function () {
 
-    // Tell Figma the size the plugin UI window.
     showUI({ height: 660, width: 500 })
 
     on<CreateSwatchesEvent>('CREATE_SWATCHES', async (grid) => {
-        await createSwatches(grid)
-    })
-
-    on<CreateRectanglesEvent>('CREATE_RECTANGLES', (count) => {
-
-        // 1) Create a number rectangles in Figma.
-        // 2) Send event communicating rectangles have been created so App.tsx 
-        // (which is listening for this event) can respond with SuccessModal.tsx
-
-        createRectangles(parseInt(count))
-        emit<RectanglesCreatedEvent>('RECTANGLES_CREATED_EVENT')
+        await loadFonts()
+        if (isType(props, "VARIABLES")) {
+            if (isAction(props, "PALETTE")) paletteVariables(grid, props.update)
+            if (isAction(props, "CONTEXTUAL")) contextualVariables(props.update)
+            if (isAction(props, "DRAW")) renderPaletteVariables(grid, props.type)
+        } else if (isType(props, "STYLES")) {
+            if (isAction(props, "PALETTE")) createPaletteStyles(grid, props.update)
+            if (isAction(props, "DRAW")) renderPalette(grid, props.type)
+        }
+        figma.closePlugin()
     })
 
     on<ClosePluginEvent>('CLOSE_PLUGIN', () => {
-
-        // Quit the plugin
         figma.closePlugin()
     })
 }
+
+const isType = (props: any, action: string) => {
+    return props.type === action
+}
+
+const isAction = (props: any, action: string) => {
+    return props.categories.includes(action)
+}
+
+const loadFonts = async () => {
+    return Promise.all([
+        figma.loadFontAsync({ family: 'Inter', style: 'Regular' }),
+        figma.loadFontAsync({ family: 'Inter', style: 'Medium' }),
+        figma.loadFontAsync({ family: 'Inter', style: 'Bold' })
+    ])
+};

@@ -3,7 +3,8 @@ import { variableName } from "./variableName"
 import { hexToRgb } from "./hexToRgb";
 import { swatchDescription } from "./swatchDescription"
 
-export const updatePaletteVariables = (grid: Matrix.Grid, localVariables: Variable[]) => {
+export const updatePaletteVariables = (grid: Matrix.Grid) => {
+    const localVariables = figma.variables.getLocalVariables("COLOR")
     grid.columns.forEach(function (column) {
         column.rows.forEach(function (swatch) {
             const name = variableName(swatch)
