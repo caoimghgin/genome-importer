@@ -38,21 +38,21 @@ export const contextualVariables = (update: Boolean) => {
     createContextualVariable(collection, "paint/~/info", ["info/400", "info/300"])
     createContextualVariable(collection, "paint/~/highlight", ["highlight/075", "highlight/075"])
 
-    createContextualVariable(collection, "paint/chromatic/primary/active", ["primary/600", "primary/500"])
-    createContextualVariable(collection, "paint/chromatic/primary/hover", ["primary/300", "primary/200"])
-    createContextualVariable(collection, "paint/chromatic/primary/disabled", ["primary/085", "primary/800"])
+    createContextualVariable(collection, "chromatic/primary/active", ["primary/600", "primary/500"])
+    createContextualVariable(collection, "chromatic/primary/hover", ["primary/300", "primary/200"])
+    createContextualVariable(collection, "chromatic/primary/disabled", ["primary/085", "primary/800"])
 
-    createContextualVariable(collection, "paint/chromatic/secondary/active", ["neutral/050", "neutral/900"])
-    createContextualVariable(collection, "paint/chromatic/secondary/hover", ["neutral/025", "neutral/800"])
-    createContextualVariable(collection, "paint/chromatic/secondary/disabled", ["neutral/400", "neutral/400"])
+    createContextualVariable(collection, "chromatic/secondary/active", ["neutral/050", "neutral/900"])
+    createContextualVariable(collection, "chromatic/secondary/hover", ["neutral/025", "neutral/800"])
+    createContextualVariable(collection, "chromatic/secondary/disabled", ["neutral/400", "neutral/400"])
 
-    createContextualVariable(collection, "paint/chromatic/positive/active", ["positive/600", "positive/500"])
-    createContextualVariable(collection, "paint/chromatic/positive/hover", ["positive/300", "positive/200"])
-    createContextualVariable(collection, "paint/chromatic/positive/disabled", ["positive/085", "positive/800"])
+    createContextualVariable(collection, "chromatic/positive/active", ["positive/600", "positive/500"])
+    createContextualVariable(collection, "chromatic/positive/hover", ["positive/300", "positive/200"])
+    createContextualVariable(collection, "chromatic/positive/disabled", ["positive/085", "positive/800"])
 
-    createContextualVariable(collection, "paint/chromatic/negative/active", ["negative/600", "negative/500"])
-    createContextualVariable(collection, "paint/chromatic/negative/hover", ["negative/300", "negative/200"])
-    createContextualVariable(collection, "paint/chromatic/negative/disabled", ["negative/085", "negative/800"])
+    createContextualVariable(collection, "chromatic/negative/active", ["negative/600", "negative/500"])
+    createContextualVariable(collection, "chromatic/negative/hover", ["negative/300", "negative/200"])
+    createContextualVariable(collection, "chromatic/negative/disabled", ["negative/085", "negative/800"])
 
     createContextualVariable(collection, "stamp/~/white", ["neutral/000", "neutral/000"])
     createContextualVariable(collection, "stamp/~/black", ["neutral/950", "neutral/950"])

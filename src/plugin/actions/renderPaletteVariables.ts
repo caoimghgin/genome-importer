@@ -17,7 +17,7 @@ export const renderPaletteVariables = (matrix: Matrix.Grid, type: string) => {
         column.rows.map((swatch, rowIndex) => {
             if (colIndex === 0) nodes.push(createWeightLabel(swatch, offsetY));
             const name = variableName(swatch);
-            const paintStyle = getVariable(name)[0];
+            const paintStyle = getVariable(name);
             nodes.push(createSwatchFrame(swatch, paintStyle, offsetX, offsetY));
             if (colIndex + 1 === colArray.length) {
                 nodes.push(createTargetLabel(matrix.columns[0].rows[rowIndex], offsetX, offsetY));
@@ -30,7 +30,7 @@ export const renderPaletteVariables = (matrix: Matrix.Grid, type: string) => {
 
     const frame = figma.createFrame()
     frame.name = "palette"
-    bindVariableToNode(getVariable("paper/~/~")[0], frame)
+    bindVariableToNode(getVariable("paper"), frame)
     frame.resize(1600, 800);
     frame.x = -32
     frame.y = -90
@@ -49,7 +49,7 @@ const createSemanticLabel = (column: Matrix.Column, offsetX: number) => {
     result.resize(swatchWidth, swatchHeight);
     result.x = offsetX;
     result.y = 0 - swatchHeight * 1.5;
-    bindVariableToNode(getVariable("ink/~/ff")[0], result)
+    bindVariableToNode(getVariable("ink/ff"), result)
     figma.currentPage.appendChild(result);
     return result;
 }
@@ -65,15 +65,15 @@ const createWeightLabel = (swatch: Matrix.Swatch, offsetY: number) => {
     result.resize(swatchWidth / 2, swatchHeight);
     result.x = -16;
     result.y = offsetY;
-    bindVariableToNode(getVariable("ink/~/ff")[0], result)
+    bindVariableToNode(getVariable("ink/ff"), result)
     figma.currentPage.appendChild(result);
     return result;
 }
 
 const createSwatchLabel = (swatch: Matrix.Swatch) => {
     const result = figma.createText();
-    const whiteStamp = getVariable("stamp/~/white")[0]
-    const blackStamp = getVariable("stamp/~/black")[0]
+    const whiteStamp = getVariable("stamp/white")
+    const blackStamp = getVariable("stamp/black")
     let label = swatch.hex.toUpperCase();
     if (swatch.isUserDefined) label = '⭐️ ' + label;
     if (swatch.isPinned) label = '📍 ' + label;
@@ -102,7 +102,7 @@ const createTargetLabel = (swatch: Matrix.Swatch, offsetX: number, offsetY: numb
     result.resize(swatchWidth / 2, swatchHeight);
     result.x = offsetX + swatchWidth + 24;
     result.y = offsetY;
-    bindVariableToNode(getVariable("ink/~/ff")[0], result)
+    bindVariableToNode(getVariable("ink/ff"), result)
     return result;
 }
 
@@ -134,9 +134,14 @@ const createFrameName = (swatch: Matrix.Swatch) => {
 
 const getVariable = (name: string) => {
 
-    //    bindVariableToNode(getVariable("ink/~/ff")[0], result)
-
-    return localVariables.filter((paintStyle) => {
-        return paintStyle.name === name;
+    const result = localVariables.filter((variable) => {
+        return nameScrubber(variable.name) === nameScrubber(name)
     });
+
+    if (result.length === 1) return result[0]
+    throw new Error(`getVariable(${name}) returned ${result.length}`);
+
+    function nameScrubber(name: string) {
+        return name.split('/').filter(item => item !== "~").join("/")
+    }
 }
