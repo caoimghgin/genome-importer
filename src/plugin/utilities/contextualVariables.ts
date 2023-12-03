@@ -79,13 +79,16 @@ const createVariable = (name: string, collection: VariableCollection) => {
 const createContextualVariableCollection = () => {
     const result = figma.variables.createVariableCollection(collectionTitle);
     result.renameMode(result.modes[0].modeId, lightModeTitle)
-    result.addMode(darkModeTitle)
+    // Free Figma accounts are limited to one mode. Continue as best as possible.
+    try { result.addMode(darkModeTitle) } catch (error) { console.error(error) }
     return result
 }
 
 const bindPaletteToVariableAlias = (collection: VariableCollection, variable: Variable, light: string, dark: string ) => {
     const lightMode = localVariables.filter(item => item.name === light)[0]
-    const darkMode = localVariables.filter(item => item.name === dark)[0]
     variable.setValueForMode(collection.modes[0].modeId, figma.variables.createVariableAlias(lightMode))
-    variable.setValueForMode(collection.modes[1].modeId, figma.variables.createVariableAlias(darkMode))
+    if (collection.modes.length > 1) {
+        const darkMode = localVariables.filter(item => item.name === dark)[0]
+        variable.setValueForMode(collection.modes[1].modeId, figma.variables.createVariableAlias(darkMode))
+    }
 }
