@@ -10,6 +10,7 @@ import { Matrix } from './genome/modules/SwatchMatrix'
 import { LoadingView } from './views/LoadingView'
 import { RenderPreview } from './views/RenderPreview'
 import { OptimizationMessage } from './views/OptimizationMessage'
+import { SuccessModal } from './views/SuccessModal'
 
 function App() {
 
@@ -17,6 +18,8 @@ function App() {
     const [optimizationOptions, setOptimizationOptions] = useState(Array<DropdownOption>({ value: 'Genome v2' }))
     const [optimizationValue, setOptimizationValue] = useState<string>('Genome v2');
     const [gridModel, setGridModel] = useState<Matrix.Grid>();
+    const [showCompletedModal, setShowCompletedModal] = useState<boolean>(false)
+    const [count, setCount] = useState<string>("5")
 
     useEffect(() => {
 
@@ -126,6 +129,10 @@ function App() {
         )
     }
 
+    const handleShowCompletedModel = () => {
+        setShowCompletedModal(!showCompletedModal)
+    }
+
     const MainView = () => {
 
         const [tabOption, setTabOption] = useState<string>('Import');
@@ -135,7 +142,12 @@ function App() {
             { children: OptionsView(), value: 'Options' },
         ]
 
-        return <Tabs onValueChange={handleValueChange} options={tabOptions} value={tabOption} />
+        return (
+            <div>
+                <Tabs onValueChange={handleValueChange} options={tabOptions} value={tabOption} />
+                <SuccessModal message={count} show={showCompletedModal} toggle={handleShowCompletedModel} complete={handleClosePlugin} />
+            </div>
+        )
 
         function handleValueChange(newValue: string) {
             console.log(newValue);
