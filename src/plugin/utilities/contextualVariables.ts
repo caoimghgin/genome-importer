@@ -56,7 +56,7 @@ export const contextualVariables = (update: Boolean) => {
 
     createContextualVariable(collection, "stamp/~/white", ["neutral/000", "neutral/000"])
     createContextualVariable(collection, "stamp/~/black", ["neutral/950", "neutral/950"])
-    createContextualVariable(collection, "stamp/~/transparent", ["alpha/transparent/~", "alpha/transparent/~"])
+    // createContextualVariable(collection, "stamp/~/transparent", ["alpha/transparent/~", "alpha/transparent/~"])
 
 }
 
