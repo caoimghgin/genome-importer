@@ -20,6 +20,16 @@ export interface RectanglesCreatedEvent extends EventHandler {
   handler: () => void
 }
 
+export interface GetEnvironmentEvent extends EventHandler {
+  name: 'GET_ENVIRONMENT'
+  handler: () => void
+}
+
+export interface EnvironmentEvent extends EventHandler {
+  name: 'ENVIRONMENT'
+  handler: (data: any) => void
+}
+
 export interface ClosePluginEvent extends EventHandler {
   name: 'CLOSE_PLUGIN'
   handler: () => void

@@ -1,19 +1,28 @@
 import { showUI, on, emit } from '@create-figma-plugin/utilities'
-import { ClosePluginEvent, CreateSwatchesEvent } from '../events/handlers'
+import { ClosePluginEvent, CreateSwatchesEvent, GetEnvironmentEvent, EnvironmentEvent } from '../events/handlers'
 // import { createSwatches } from './actions/createSwatches'
 import { paletteVariables } from './actions/paletteVariables'
 import { contextualVariables } from './utilities/contextualVariables'
 import { createPaletteStyles } from './actions/createPaletteStyles'
 import { renderPalette } from './actions/renderPalette'
 import { renderPaletteVariables } from './actions/renderPaletteVariables'
-
-const props = { type: "VARIABLES", categories: ["PALETTE", "CONTEXTUAL", "DRAW"], update: false }
+import { variableCollectionExists } from './utilities/variableCollectionExists'
+import { paletteCollectionName, contextualCollectionName } from "./constants";
 
 export default function () {
 
     showUI({ height: 660, width: 500 })
 
-    on<CreateSwatchesEvent>('CREATE_SWATCHES', async (grid) => {
+    on<GetEnvironmentEvent>('GET_ENVIRONMENT', async () => {
+        console.log("Oh, you want the ENVIRONMENT huh?")
+
+        const foo = variableCollectionExists(paletteCollectionName)
+        const bar = variableCollectionExists(contextualCollectionName)
+
+        emit<EnvironmentEvent>('ENVIRONMENT', {paletteCollectionExists: foo, contextualCollectionExists: bar})
+    })
+
+    on<CreateSwatchesEvent>('CREATE_SWATCHES', async ({grid, props}) => {
         await loadFonts()
         if (isType(props, "VARIABLES")) {
             if (isAction(props, "PALETTE")) paletteVariables(grid, props.update)

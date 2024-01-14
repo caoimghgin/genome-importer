@@ -132,7 +132,7 @@ const createAlphaPaintStyles = () => {
     function createTints(solids: string[], alphas: number[]) {
         solids.map(solid => {
             alphas.map(alpha => {
-                const name = `${rootName}/alphas/${(solid === whiteHexValue ? "lighten" : "darken")}/${alpha * 100}a`
+                const name = `${rootName}/alpha/${(solid === whiteHexValue ? "lighten" : "darken")}/${alpha * 100}a`
                 const result = figma.createPaintStyle()
                 result.name = name
                 result.paints = [{ type: 'SOLID', opacity: alpha, color: hexToRgb("#FFFFFF") }]

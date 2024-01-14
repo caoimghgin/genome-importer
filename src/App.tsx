@@ -3,7 +3,7 @@ import { h, JSX } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 import { Button, Container, Inline, Text, Muted, VerticalSpace, Dropdown, DropdownOption, TabsOption, Tabs, FileUploadDropzone, Columns, IconPlus32, render } from '@create-figma-plugin/ui'
 import { emit, on } from '@create-figma-plugin/utilities'
-import { CreateSwatchesEvent, SwatchesCreatedEvent, ClosePluginEvent } from './events/handlers'
+import { CreateSwatchesEvent, SwatchesCreatedEvent, ClosePluginEvent, GetEnvironmentEvent, EnvironmentEvent } from './events/handlers'
 import { Options } from './genome/constants/weightedTargets'
 import { Mapper } from './genome/mapper'
 import { Matrix } from './genome/modules/SwatchMatrix'
@@ -20,14 +20,23 @@ function App() {
     const [gridModel, setGridModel] = useState<Matrix.Grid>();
     const [showCompletedModal, setShowCompletedModal] = useState<boolean>(false)
     const [count, setCount] = useState<string>("5")
+    const [props, setProps] = useState<any>( { type: "VARIABLES", categories: ["PALETTE", "CONTEXTUAL", "DRAW"], update: false })
 
     useEffect(() => {
 
-        setOptimizationOptions(Options.map(item => { return { value: item.label } }))
+        emit<GetEnvironmentEvent>("GET_ENVIRONMENT")
+
+        on<EnvironmentEvent>('ENVIRONMENT', (data) => {
+            console.log("GOTCAH", data)
+        })
 
         on<SwatchesCreatedEvent>('SWATCHES_CREATED', () => {
             setIsLoading(false)
         })
+
+        setOptimizationOptions(Options.map(item => { 
+            return { value: item.label } 
+        }))
 
     }, [])
 
@@ -42,7 +51,7 @@ function App() {
     const handleImportFile = async () => {
         const grid = Mapper.optimizeSwatches(gridModel!, optimizationValue)
         await setIsLoading(true)
-        emit<CreateSwatchesEvent>('CREATE_SWATCHES', grid)
+        emit<CreateSwatchesEvent>('CREATE_SWATCHES', {grid:grid, props:props})
     }
 
     const handleSelectedFiles = (files: Array<File>) => {
@@ -124,7 +133,7 @@ function App() {
         return (
             <Container space="medium">
                 <VerticalSpace space="extraLarge" />
-                Show options...
+                Show all options...
             </Container>
         )
     }

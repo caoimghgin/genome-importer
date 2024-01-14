@@ -72,8 +72,8 @@ const createWeightLabel = (swatch: Matrix.Swatch, offsetY: number) => {
 
 const createSwatchLabel = (swatch: Matrix.Swatch) => {
     const result = figma.createText();
-    const whiteStamp = getVariable("stamp/white")
-    const blackStamp = getVariable("stamp/black")
+    const whiteStamp = getVariable("stamp/white/~")
+    const blackStamp = getVariable("stamp/black/~")
     let label = swatch.hex.toUpperCase();
     if (swatch.isUserDefined) label = '⭐️ ' + label;
     if (swatch.isPinned) label = '📍 ' + label;
