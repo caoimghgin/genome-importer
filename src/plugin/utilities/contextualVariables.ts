@@ -5,12 +5,7 @@ const collectionTitle = "contextual"
 const darkModeTitle = "dark"
 const lightModeTitle = "light"
 
-export const contextualVariables = (update: Boolean) => {
-
-    if (update) {
-        console.log("TBD! I don't have an update routine for contextual variables")
-        return
-    }
+export const createContextualVariables = () => {
 
     localVariables = figma.variables.getLocalVariables(dataType)
     const collection = createContextualVariableCollection()

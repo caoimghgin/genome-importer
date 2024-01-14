@@ -5,7 +5,7 @@ const swatchWidth = 140;
 const swatchHeight = 44;
 var localVariables: Variable[] = []
 
-export const renderPaletteVariables = (matrix: Matrix.Grid, type: string) => {
+export const updatePaletteVariablesMatrix = (matrix: Matrix.Grid) => {
 
     localVariables = figma.variables.getLocalVariables()
     const nodes: BaseNode[] = [];
@@ -15,27 +15,59 @@ export const renderPaletteVariables = (matrix: Matrix.Grid, type: string) => {
     matrix.columns.map((column, colIndex, colArray) => {
         nodes.push(createSemanticLabel(column, offsetX));
         column.rows.map((swatch, rowIndex) => {
-            if (colIndex === 0) nodes.push(createWeightLabel(swatch, offsetY));
+            // if (colIndex === 0) nodes.push(createWeightLabel(swatch, offsetY));
             const name = variableName(swatch);
             const paintStyle = getVariable(name);
-            nodes.push(createSwatchFrame(swatch, paintStyle, offsetX, offsetY));
-            if (colIndex + 1 === colArray.length) {
-                nodes.push(createTargetLabel(matrix.columns[0].rows[rowIndex], offsetX, offsetY));
-            }
-            offsetY = offsetY + swatchHeight;
+            updateSwatchLabel(swatch)
+            // nodes.push(createSwatchFrame(swatch, paintStyle, offsetX, offsetY));
+            // if (colIndex + 1 === colArray.length) {
+            //     nodes.push(createTargetLabel(matrix.columns[0].rows[rowIndex], offsetX, offsetY));
+            // }
+            // offsetY = offsetY + swatchHeight;
         });
         offsetX = offsetX + swatchWidth;
         offsetY = 0;
     })
 
-    const frame = figma.createFrame()
-    frame.name = "palette"
-    bindVariableToNode(getVariable("paper"), frame)
-    frame.resize(1600, 800);
-    frame.x = -32
-    frame.y = -90
-    figma.group(nodes, frame)
-    figma.viewport.scrollAndZoomIntoView(nodes);
+    // const frame = figma.createFrame()
+    // frame.name = "palette"
+    // bindVariableToNode(getVariable("paper"), frame)
+    // frame.resize(1600, 800);
+    // frame.x = -32
+    // frame.y = -90
+    // figma.group(nodes, frame)
+    // figma.viewport.scrollAndZoomIntoView(nodes);
+}
+
+const updateSwatchLabel = (swatch: Matrix.Swatch) => {
+    // const x = figma.createText();
+
+    // const x = figma.getNodeById("foo")
+    // const y = figma.currentPage.children.node
+
+    console.log("UPDATE -> ", variableName(swatch))
+    return
+
+
+    const result = figma.createText();
+    const whiteStamp = getVariable("stamp/white/~")
+    const blackStamp = getVariable("stamp/black/~")
+    let label = swatch.hex.toUpperCase();
+    if (swatch.isUserDefined) label = '⭐️ ' + label;
+    if (swatch.isPinned) label = '📍 ' + label;
+    result.characters = label;
+    result.name = result.characters + ' (L*' + swatch.lightness + ')';
+    (swatch.WCAG2_W_45 || swatch.WCAG2_W_30)
+        ? bindVariableToNode(whiteStamp, result)
+        : bindVariableToNode(blackStamp, result)
+    result.fontName =
+        swatch.WCAG2_W_30 && !swatch.WCAG2_W_45
+            ? { family: 'Inter', style: 'Bold' }
+            : { family: 'Inter', style: 'Regular' };
+    result.fontSize = 14;
+    result.textAlignHorizontal = 'CENTER';
+    result.textAlignVertical = 'CENTER';
+    return result;
 }
 
 const createSemanticLabel = (column: Matrix.Column, offsetX: number) => {

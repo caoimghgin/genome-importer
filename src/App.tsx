@@ -27,7 +27,9 @@ function App() {
         emit<GetEnvironmentEvent>("GET_ENVIRONMENT")
 
         on<EnvironmentEvent>('ENVIRONMENT', (data) => {
-            console.log("GOTCAH", data)
+            if (data.paletteCollectionExists ) {
+                setProps({ type: "VARIABLES", categories: ["PALETTE", "CONTEXTUAL", "DRAW"], update: true })
+            }
         })
 
         on<SwatchesCreatedEvent>('SWATCHES_CREATED', () => {

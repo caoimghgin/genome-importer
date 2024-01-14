@@ -1,13 +1,14 @@
 import { showUI, on, emit } from '@create-figma-plugin/utilities'
 import { ClosePluginEvent, CreateSwatchesEvent, GetEnvironmentEvent, EnvironmentEvent } from '../events/handlers'
-// import { createSwatches } from './actions/createSwatches'
-import { paletteVariables } from './actions/paletteVariables'
-import { contextualVariables } from './utilities/contextualVariables'
+import { createPaletteVariables } from './actions/createPaletteVariables'
+import { createContextualVariables } from './utilities/contextualVariables'
 import { createPaletteStyles } from './actions/createPaletteStyles'
 import { renderPalette } from './actions/renderPalette'
-import { renderPaletteVariables } from './actions/renderPaletteVariables'
+import { createPaletteVariablesMatrix } from './actions/createPaletteVariablesMatrix'
 import { variableCollectionExists } from './utilities/variableCollectionExists'
 import { paletteCollectionName, contextualCollectionName } from "./constants";
+import { updatePaletteVariables } from './utilities/updatePaletteVariables'
+import { updatePaletteVariablesMatrix } from './actions/updatePaletteVariablesMatrix'
 
 export default function () {
 
@@ -15,19 +16,25 @@ export default function () {
 
     on<GetEnvironmentEvent>('GET_ENVIRONMENT', async () => {
         console.log("Oh, you want the ENVIRONMENT huh?")
-
         const foo = variableCollectionExists(paletteCollectionName)
         const bar = variableCollectionExists(contextualCollectionName)
-
         emit<EnvironmentEvent>('ENVIRONMENT', {paletteCollectionExists: foo, contextualCollectionExists: bar})
     })
 
     on<CreateSwatchesEvent>('CREATE_SWATCHES', async ({grid, props}) => {
         await loadFonts()
         if (isType(props, "VARIABLES")) {
-            if (isAction(props, "PALETTE")) paletteVariables(grid, props.update)
-            if (isAction(props, "CONTEXTUAL")) contextualVariables(props.update)
-            if (isAction(props, "DRAW")) renderPaletteVariables(grid, props.type)
+
+            if (props.update) {
+                if (isAction(props, "PALETTE")) updatePaletteVariables(grid)
+                if (isAction(props, "DRAW")) updatePaletteVariablesMatrix(grid)
+
+            } else {
+                if (isAction(props, "PALETTE")) createPaletteVariables(grid)
+                if (isAction(props, "CONTEXTUAL")) createContextualVariables()
+                if (isAction(props, "DRAW")) createPaletteVariablesMatrix(grid, props.type)
+            }
+
         } else if (isType(props, "STYLES")) {
             if (isAction(props, "PALETTE")) createPaletteStyles(grid, props.update)
             if (isAction(props, "DRAW")) renderPalette(grid, props.type)
