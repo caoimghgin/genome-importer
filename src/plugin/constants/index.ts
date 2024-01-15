@@ -2,6 +2,8 @@ import { Matrix } from "../../genome/modules/SwatchMatrix";
 
 export const paletteCollectionName = 'palette'
 export const contextualCollectionName = 'contextual'
+export const dimensionCollectionName = 'dimension'
+
 export const blackHexValue = "#FFFFFF"
 export const whiteHexValue = "#000000"
 export const alphas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]

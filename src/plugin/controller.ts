@@ -9,6 +9,7 @@ import { variableCollectionExists } from './utilities/variableCollectionExists'
 import { paletteCollectionName, contextualCollectionName } from "./constants";
 import { updatePaletteVariables } from './utilities/updatePaletteVariables'
 import { updatePaletteVariablesMatrix } from './actions/updatePaletteVariablesMatrix'
+import { createDimensionVariables } from './actions/createDimensionVariables'
 
 export default function () {
 
@@ -33,6 +34,7 @@ export default function () {
                 if (isAction(props, "PALETTE")) createPaletteVariables(grid)
                 if (isAction(props, "CONTEXTUAL")) createContextualVariables()
                 if (isAction(props, "DRAW")) createPaletteVariablesMatrix(grid, props.type)
+                createDimensionVariables()
             }
 
         } else if (isType(props, "STYLES")) {
