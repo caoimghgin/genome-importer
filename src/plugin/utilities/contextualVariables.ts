@@ -1,5 +1,5 @@
 let localVariables: Variable[] = []
-
+let localVariableCollectionNames: String[]
 const dataType = "COLOR"
 const collectionTitle = "contextual"
 const darkModeTitle = "dark"
@@ -7,12 +7,23 @@ const lightModeTitle = "light"
 
 export const createContextualVariables = () => {
 
+    localVariableCollectionNames = figma.variables.getLocalVariableCollections().map(item => item.name)
+
+    const variables = figma.variables.getLocalVariables()
+    const inkFf = getLocalVariableXXX("ink/ff", variables)
+
+    const collectionNames = figma.variables.getLocalVariableCollections().map(item => item.name)
+    if (collectionNames.includes("contextual")) console.log("Contextual collection exists...") // Don't create it...
+    if (inkFf) console.log("ink/ff exists...") // don't create it...
+
+
     localVariables = figma.variables.getLocalVariables(dataType)
     const collection = createContextualVariableCollection()
 
     createContextualVariable(collection, "canvas/~/pp", ["neutral/025", "neutral/900"])
     createContextualVariable(collection, "canvas/~/p", ["neutral/015", "neutral/900"])
     createContextualVariable(collection, "canvas/~/~", ["neutral/000", "neutral/950"])
+    createContextualVariable(collection, "canvas/~/f", ["neutral/000", "neutral/950"])
 
     createContextualVariable(collection, "paper/~/pp", ["neutral/025", "neutral/800"])
     createContextualVariable(collection, "paper/~/p", ["neutral/015", "neutral/800"])
@@ -108,57 +119,28 @@ export const createContextualVariables = () => {
     createContextualVariable(collection, "chromatic/f/p", ["alpha/lighten/20a", "alpha/lighten/20a"])
     createContextualVariable(collection, "chromatic/f/f", ["alpha/darken/20a", "alpha/darken/20a"])
     createContextualVariable(collection, "chromatic/f/ff", ["alpha/darken/50a", "alpha/darken/50a"])
-
-    // createContextualVariable(collection, "chromatic/primary/pp", ["primary/075", "primary/075"])
-    // createContextualVariable(collection, "chromatic/primary/p", ["primary/100", "primary/100"])
-    // createContextualVariable(collection, "chromatic/primary/f", ["primary/500", "primary/100"])
-    // createContextualVariable(collection, "chromatic/primary/ff", ["primary/600", "primary/100"])
-    // createContextualVariable(collection, "chromatic/secondary/pp", ["secondary/075", "secondary/075"])
-    // createContextualVariable(collection, "chromatic/secondary/p", ["secondary/100", "secondary/100"])
-    // createContextualVariable(collection, "chromatic/secondary/f", ["secondary/500", "secondary/100"])
-    // createContextualVariable(collection, "chromatic/secondary/ff", ["secondary/600", "secondary/100"])
-    // createContextualVariable(collection, "chromatic/positive/pp", ["positive/075", "positive/075"])
-    // createContextualVariable(collection, "chromatic/positive/p", ["positive/100", "positive/100"])
-    // createContextualVariable(collection, "chromatic/positive/f", ["positive/500", "positive/100"])
-    // createContextualVariable(collection, "chromatic/positive/ff", ["positive/600", "positive/100"])
-    // createContextualVariable(collection, "chromatic/negative/pp", ["negative/075", "negative/075"])
-    // createContextualVariable(collection, "chromatic/negative/p", ["negative/100", "negative/100"])
-    // createContextualVariable(collection, "chromatic/negative/f", ["negative/500", "negative/100"])
-    // createContextualVariable(collection, "chromatic/negative/ff", ["negative/600", "negative/100"])
-    // createContextualVariable(collection, "chromatic/warning/pp", ["highlight/075", "highlight/075"])
-    // createContextualVariable(collection, "chromatic/warning/p", ["highlight/100", "highlight/100"])
-    // createContextualVariable(collection, "chromatic/warning/f", ["highlight/500", "highlight/100"])
-    // createContextualVariable(collection, "chromatic/warning/ff", ["highlight/600", "highlight/100"])
-    // createContextualVariable(collection, "chromatic/info/pp", ["info/075", "info/075"])
-    // createContextualVariable(collection, "chromatic/info/p", ["info/100", "info/100"])
-    // createContextualVariable(collection, "chromatic/info/f", ["info/500", "info/100"])
-    // createContextualVariable(collection, "chromatic/info/ff", ["info/600", "info/100"])
-    // createContextualVariable(collection, "chromatic/system/pp", ["system/075", "system/075"])
-    // createContextualVariable(collection, "chromatic/system/p", ["system/100", "system/100"])
-    // createContextualVariable(collection, "chromatic/system/f", ["system/500", "system/100"])
-    // createContextualVariable(collection, "chromatic/system/ff", ["system/600", "system/100"])
-
-
 }
 
 const createContextualVariable = (collection: VariableCollection, contextual: string, mode: Array<string> ) => {
     
-    let variable = getVariable(contextual)
-    if (!variable) variable = createVariable(contextual, collection)
+    const variable = createVariable(contextual, collection)
     bindPaletteToVariableAlias(collection, variable, mode[0], mode[1])
 
-    function getVariable(name: string) {
-        const variable = localVariables.filter(item => item.name === name)
-        return (variable ? variable[0] : null)
-    }
+    // function getVariable(name: string) {
+    //     const variable = localVariables.filter(item => item.name === name)
+    //     return (variable ? variable[0] : null)
+    // }
 }
 
 const createVariable = (name: string, collection: VariableCollection) => {
-    return figma.variables.createVariable(name, collection.id, dataType)
+    const result = localVariables.filter(item => item.name === name)[0]
+    return result ? result : figma.variables.createVariable(name, collection.id, dataType)
 }
 
 const createContextualVariableCollection = () => {
-    const result = figma.variables.createVariableCollection(collectionTitle);
+    let result = figma.variables.getLocalVariableCollections().filter(item => item.name === collectionTitle)[0]
+    if (result) return result
+    result = figma.variables.createVariableCollection(collectionTitle);
     result.renameMode(result.modes[0].modeId, lightModeTitle)
     // Free Figma accounts are limited to one mode. Continue as best as possible.
     try { result.addMode(darkModeTitle) } catch (error) { console.error(error) }
@@ -171,5 +153,19 @@ const bindPaletteToVariableAlias = (collection: VariableCollection, variable: Va
     if (collection.modes.length > 1) {
         const darkMode = localVariables.filter(item => item.name === dark)[0]
         variable.setValueForMode(collection.modes[1].modeId, figma.variables.createVariableAlias(darkMode))
+    }
+}
+
+const getLocalVariableXXX = (name: string, variables: Variable[]) => {
+    const result = findVariable(name, variables)
+    return result.length === 1 ? result[0] : null
+}
+
+function findVariable(name: string, variables: Variable[]) {
+    return variables.filter((variable) => {
+        return nameScrubber(variable.name) === nameScrubber(name)
+    })
+    function nameScrubber(name: string) {
+        return name.split('/').filter(item => item !== "~").join("/")
     }
 }

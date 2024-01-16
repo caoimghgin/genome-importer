@@ -10,13 +10,30 @@ import { paletteCollectionName, contextualCollectionName } from "./constants";
 import { updatePaletteVariables } from './utilities/updatePaletteVariables'
 import { updatePaletteVariablesMatrix } from './actions/updatePaletteVariablesMatrix'
 import { createDimensionVariables } from './actions/createDimensionVariables'
+import { getLocalVariable, getLocalVariables } from './utilities/getVariable'
 
 export default function () {
 
     showUI({ height: 660, width: 500 })
 
     on<GetEnvironmentEvent>('GET_ENVIRONMENT', async () => {
-        console.log("Oh, you want the ENVIRONMENT huh?")
+
+        const variables = getLocalVariables(null)
+        const inkFf = getLocalVariable("ink/ff", variables)
+
+        console.log("find name ->", inkFf)
+
+        console.log("Oh, you want the ENVIRONMENT huh?", variables)
+
+        console.log("All collections?",  figma.variables.getLocalVariableCollections().map(item => item.name))
+
+        const collectionNames = figma.variables.getLocalVariableCollections().map(item => item.name)
+        if (collectionNames.includes("contextual")) console.log("Contextual collection exists...") // Don't create it...
+        if (inkFf) console.log("ink/ff exists...") // don't create it...
+
+        let zzz = figma.variables.getLocalVariableCollections().filter(item => item.name === "contextual")[0]
+        console.log("FOUND?", zzz)
+
         const foo = variableCollectionExists(paletteCollectionName)
         const bar = variableCollectionExists(contextualCollectionName)
         emit<EnvironmentEvent>('ENVIRONMENT', {paletteCollectionExists: foo, contextualCollectionExists: bar})
@@ -29,6 +46,7 @@ export default function () {
             if (props.update) {
                 if (isAction(props, "PALETTE")) updatePaletteVariables(grid)
                 if (isAction(props, "DRAW")) updatePaletteVariablesMatrix(grid)
+                if (isAction(props, "CONTEXTUAL")) createContextualVariables()
 
             } else {
                 if (isAction(props, "PALETTE")) createPaletteVariables(grid)
