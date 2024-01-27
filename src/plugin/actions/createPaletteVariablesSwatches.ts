@@ -5,12 +5,13 @@ const swatchWidth = 140;
 const swatchHeight = 44;
 var localVariables: Variable[] = []
 
-export const createPaletteVariablesMatrix = (matrix: Matrix.Grid, type: string) => {
+export const createPaletteVariablesSwatches = (matrix: Matrix.Grid, type: string) => {
 
     localVariables = figma.variables.getLocalVariables()
     const nodes: BaseNode[] = [];
     let offsetX = swatchWidth / 2;
     let offsetY = 0;
+    let frameHeight = 0
 
     matrix.columns.map((column, colIndex, colArray) => {
         nodes.push(createSemanticLabel(column, offsetX));
@@ -23,6 +24,7 @@ export const createPaletteVariablesMatrix = (matrix: Matrix.Grid, type: string) 
                 nodes.push(createTargetLabel(matrix.columns[0].rows[rowIndex], offsetX, offsetY));
             }
             offsetY = offsetY + swatchHeight;
+            frameHeight = offsetY
         });
         offsetX = offsetX + swatchWidth;
         offsetY = 0;
@@ -31,7 +33,7 @@ export const createPaletteVariablesMatrix = (matrix: Matrix.Grid, type: string) 
     const frame = figma.createFrame()
     frame.name = "palette"
     bindVariableToNode(getVariable("paper"), frame)
-    frame.resize(1600, 800);
+    frame.resize(1600, frameHeight+144);
     frame.x = -32
     frame.y = -90
     figma.group(nodes, frame)

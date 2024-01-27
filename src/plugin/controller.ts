@@ -4,7 +4,7 @@ import { createPaletteVariables } from './actions/createPaletteVariables'
 import { createContextualVariables } from './utilities/contextualVariables'
 import { createPaletteStyles } from './actions/createPaletteStyles'
 import { renderPalette } from './actions/renderPalette'
-import { createPaletteVariablesMatrix } from './actions/createPaletteVariablesMatrix'
+import { createPaletteVariablesSwatches } from './actions/createPaletteVariablesSwatches'
 import { variableCollectionExists } from './utilities/variableCollectionExists'
 import { paletteCollectionName, contextualCollectionName } from "./constants";
 import { updatePaletteVariables } from './utilities/updatePaletteVariables'
@@ -18,40 +18,42 @@ export default function () {
 
     on<GetEnvironmentEvent>('GET_ENVIRONMENT', async () => {
 
-        const variables = getLocalVariables(null)
-        const inkFf = getLocalVariable("ink/ff", variables)
+        // const variables = getLocalVariables(null)
+        // const inkFf = getLocalVariable("ink/ff", variables)
+        // const collectionNames = figma.variables.getLocalVariableCollections().map(item => item.name)
+        // if (collectionNames.includes("contextual")) console.log("Contextual collection exists...") // Don't create it...
+        // if (inkFf) console.log("ink/ff exists...") // don't create it...
+        // let zzz = figma.variables.getLocalVariableCollections().filter(item => item.name === "contextual")[0]
+        // console.log("FOUND?", zzz)
 
-        console.log("find name ->", inkFf)
-
-        console.log("Oh, you want the ENVIRONMENT huh?", variables)
-
-        console.log("All collections?",  figma.variables.getLocalVariableCollections().map(item => item.name))
-
-        const collectionNames = figma.variables.getLocalVariableCollections().map(item => item.name)
-        if (collectionNames.includes("contextual")) console.log("Contextual collection exists...") // Don't create it...
-        if (inkFf) console.log("ink/ff exists...") // don't create it...
-
-        let zzz = figma.variables.getLocalVariableCollections().filter(item => item.name === "contextual")[0]
-        console.log("FOUND?", zzz)
-
-        const foo = variableCollectionExists(paletteCollectionName)
-        const bar = variableCollectionExists(contextualCollectionName)
-        emit<EnvironmentEvent>('ENVIRONMENT', {paletteCollectionExists: foo, contextualCollectionExists: bar})
+        const palette = variableCollectionExists(paletteCollectionName)
+        const collection = variableCollectionExists(contextualCollectionName)
+        emit<EnvironmentEvent>('ENVIRONMENT', {paletteCollectionExists: palette, contextualCollectionExists: collection})
     })
 
     on<CreateSwatchesEvent>('CREATE_SWATCHES', async ({grid, props}) => {
         await loadFonts()
+
+        if (grid.optimization === "Popism") {
+            if (isAction(props, "PALETTE")) createPaletteVariables(grid)
+            if (isAction(props, "CONTEXTUAL")) createContextualVariables(grid.optimization)
+            if (isAction(props, "DRAW")) createPaletteVariablesSwatches(grid, props.type)
+            createDimensionVariables()
+            figma.closePlugin()
+            return
+        }
+
         if (isType(props, "VARIABLES")) {
 
             if (props.update) {
                 if (isAction(props, "PALETTE")) updatePaletteVariables(grid)
                 if (isAction(props, "DRAW")) updatePaletteVariablesMatrix(grid)
-                if (isAction(props, "CONTEXTUAL")) createContextualVariables()
+                if (isAction(props, "CONTEXTUAL")) createContextualVariables(null)
 
             } else {
                 if (isAction(props, "PALETTE")) createPaletteVariables(grid)
-                if (isAction(props, "CONTEXTUAL")) createContextualVariables()
-                if (isAction(props, "DRAW")) createPaletteVariablesMatrix(grid, props.type)
+                if (isAction(props, "CONTEXTUAL")) createContextualVariables(null)
+                if (isAction(props, "DRAW")) createPaletteVariablesSwatches(grid, props.type)
                 createDimensionVariables()
             }
 

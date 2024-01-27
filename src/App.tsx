@@ -10,16 +10,14 @@ import { Matrix } from './genome/modules/SwatchMatrix'
 import { LoadingView } from './views/LoadingView'
 import { RenderPreview } from './views/RenderPreview'
 import { OptimizationMessage } from './views/OptimizationMessage'
-import { SuccessModal } from './views/SuccessModal'
 
 function App() {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [optimizationOptions, setOptimizationOptions] = useState(Array<DropdownOption>({ value: 'Genome v2' }))
-    const [optimizationValue, setOptimizationValue] = useState<string>('Genome v2');
+    const [optimizationOptions, setOptimizationOptions] = useState(Array<DropdownOption>({ value: 'Popism' }))
+    const [optimizationValue, setOptimizationValue] = useState<string>('Popism');
     const [gridModel, setGridModel] = useState<Matrix.Grid>();
     const [showCompletedModal, setShowCompletedModal] = useState<boolean>(false)
-    const [count, setCount] = useState<string>("5")
     const [props, setProps] = useState<any>( { type: "VARIABLES", categories: ["PALETTE", "CONTEXTUAL", "DRAW"], update: false })
 
     useEffect(() => {
@@ -156,7 +154,6 @@ function App() {
         return (
             <div>
                 <Tabs onValueChange={handleValueChange} options={tabOptions} value={tabOption} />
-                <SuccessModal message={count} show={showCompletedModal} toggle={handleShowCompletedModel} complete={handleClosePlugin} />
             </div>
         )
 

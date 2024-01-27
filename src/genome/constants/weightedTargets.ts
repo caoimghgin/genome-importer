@@ -9,6 +9,7 @@ import { materialOptimization } from "../optimizations/material";
 import { newsKitOptimization } from "../optimizations/newsKit";
 import { spectrumOptimization } from "../optimizations/spectrum";
 import { baseOptimization } from "../optimizations/base";
+import { popismOptimization } from "../optimizations/popism";
 
 export type weightedTargetsRow = {
     target: number;
@@ -24,19 +25,21 @@ export const Options = [
     { value: '0', label: 'Non-optimized', message: '' },
     { value: '1', label: 'Genome', message: '' },
     { value: '2', label: 'Genome v2', message: '' },
-    { value: '3', label: 'IBM Carbon', message: '' },
-    { value: '4', label: 'SalesForce Lightning', message: '' },
-    { value: '5', label: 'Adobe Spectrum', message: '' },
-    { value: '6', label: 'Ant', message: '' },
-    { value: '7', label: 'Material', message: '' },
-    { value: '8', label: 'Accessible Palette', message: '' },
-    { value: '9', label: 'ColorBox', message: '' },
+    { value: '3', label: 'Popism', message: '' },
+    { value: '4', label: 'IBM Carbon', message: '' },
+    { value: '5', label: 'SalesForce Lightning', message: '' },
+    { value: '6', label: 'Adobe Spectrum', message: '' },
+    { value: '7', label: 'Ant', message: '' },
+    { value: '8', label: 'Material', message: '' },
+    { value: '9', label: 'Accessible Palette', message: '' },
+    { value: '10', label: 'ColorBox', message: '' },
 ];
 
 enum WeightedTargetsOptions {
     Base = 0,
     Genome,
     Genome2,
+    Popism,
     Carbon,
     Lightning,
     AdobeSpectrum,
@@ -68,6 +71,8 @@ export const WeightedTargets = (index: WeightedTargetsOptions): weightedTargetsC
             return genomeOptimization_v2;
         case WeightedTargetsOptions.Material:
             return materialOptimization;
+        case WeightedTargetsOptions.Popism:
+            return popismOptimization;
         default:
             return genomeOptimization;
     }

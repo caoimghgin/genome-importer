@@ -8,9 +8,9 @@ export const createPaletteVariables = (grid: Matrix.Grid) => {
     const collection = figma.variables.createVariableCollection(paletteCollectionName);
     collection.renameMode(collection.modes[0].modeId, "Value")
     const matrix = JSON.parse(JSON.stringify(grid)) as Matrix.Grid
-    if (isGenomeOptimization(matrix)) insertBlackWhiteSwatches(matrix)
+    insertBlackWhiteSwatches(matrix)
     createColorVariables(matrix, collection)
-    if (isGenomeOptimization(matrix)) createAlphaVariables(collection)
+    createAlphaVariables(collection)
 }
 
 const createColorVariables = (matrix: Matrix.Grid, collection: VariableCollection) => {
