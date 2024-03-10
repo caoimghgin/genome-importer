@@ -45,7 +45,7 @@ export const createSwatches = async (grid: Matrix.Grid) => {
         } else if (render === "CREATE_VARIABLES") {
             // createRootName()
             // paletteVariables(grid, false)
-            createContextualVariables()
+            // createContextualVariables()
         } else if (render === "UPDATE_VARIABLES") {
             localVariables = figma.variables.getLocalVariables("COLOR")
             updatePaletteVariables(grid)

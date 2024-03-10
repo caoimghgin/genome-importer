@@ -10,6 +10,7 @@ import { newsKitOptimization } from "../optimizations/newsKit";
 import { spectrumOptimization } from "../optimizations/spectrum";
 import { baseOptimization } from "../optimizations/base";
 import { popismOptimization } from "../optimizations/popism";
+import { universOptimization } from "../optimizations/univers";
 
 export type weightedTargetsRow = {
     target: number;

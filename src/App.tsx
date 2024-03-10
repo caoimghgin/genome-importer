@@ -96,7 +96,7 @@ function App() {
                     <VerticalSpace space="extraLarge" />
                     <VerticalSpace space="extraLarge" />
                     <VerticalSpace space="extraLarge" />
-                    <Muted>Drag a gcm.json file or select to import</Muted>
+                    <Muted>xxxDrag a gcm.json file or select to import</Muted>
                     <VerticalSpace space="extraLarge" />
                     <VerticalSpace space="extraLarge" />
                     <VerticalSpace space="extraLarge" />
