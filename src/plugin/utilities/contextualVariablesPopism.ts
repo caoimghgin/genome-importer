@@ -18,13 +18,13 @@ export const createContextualVariablesPopism = () => {
     localVariables = figma.variables.getLocalVariables(dataType)
     const collection = createContextualVariableCollection()
 
-    createContextualVariable(collection, "canvas/~/pp", ["neutral/025", "neutral/900"])
-    createContextualVariable(collection, "canvas/~/p", ["neutral/015", "neutral/900"])
+    createContextualVariable(collection, "canvas/~/pp", ["neutral/050", "neutral/900"])
+    createContextualVariable(collection, "canvas/~/p", ["neutral/025", "neutral/900"])
     createContextualVariable(collection, "canvas/~/~", ["neutral/000", "neutral/950"])
     createContextualVariable(collection, "canvas/~/f", ["neutral/000", "neutral/950"])
 
-    createContextualVariable(collection, "paper/~/pp", ["neutral/025", "neutral/800"])
-    createContextualVariable(collection, "paper/~/p", ["neutral/015", "neutral/800"])
+    createContextualVariable(collection, "paper/~/pp", ["neutral/050", "neutral/800"])
+    createContextualVariable(collection, "paper/~/p", ["neutral/025", "neutral/800"])
     createContextualVariable(collection, "paper/~/~", ["neutral/000", "neutral/900"])
 
     createContextualVariable(collection, "paper/positive/~", ["positive/025", "positive/700"])
@@ -34,68 +34,68 @@ export const createContextualVariablesPopism = () => {
 
     createContextualVariable(collection, "ink/~/ppp", ["neutral/375", "neutral/100"])
     createContextualVariable(collection, "ink/~/pp", ["neutral/350", "neutral/100"])
-    createContextualVariable(collection, "ink/~/p", ["neutral/400", "neutral/050"])
-    createContextualVariable(collection, "ink/~/~", ["neutral/800", "neutral/025"])
+    createContextualVariable(collection, "ink/~/p", ["neutral/550", "neutral/050"])
+    createContextualVariable(collection, "ink/~/~", ["neutral/800", "neutral/050"])
     createContextualVariable(collection, "ink/~/f", ["neutral/900", "neutral/000"])
     createContextualVariable(collection, "ink/~/ff", ["neutral/950", "neutral/000"])
 
-    createContextualVariable(collection, "ink/primary/p", ["primary/400", "primary/350"])
-    createContextualVariable(collection, "ink/primary/~", ["primary/400", "primary/100"])
+    createContextualVariable(collection, "ink/primary/p", ["primary/550", "primary/350"])
+    createContextualVariable(collection, "ink/primary/~", ["primary/550", "primary/100"])
 
-    createContextualVariable(collection, "ink/positive/p", ["positive/400", "positive/350"])
-    createContextualVariable(collection, "ink/positive/~", ["positive/400", "positive/100"])
+    createContextualVariable(collection, "ink/positive/p", ["positive/550", "positive/350"])
+    createContextualVariable(collection, "ink/positive/~", ["positive/550", "positive/100"])
 
-    createContextualVariable(collection, "ink/negative/p", ["negative/400", "negative/350"])
-    createContextualVariable(collection, "ink/negative/~", ["negative/400", "negative/100"])
+    createContextualVariable(collection, "ink/negative/p", ["negative/550", "negative/350"])
+    createContextualVariable(collection, "ink/negative/~", ["negative/550", "negative/100"])
 
-    createContextualVariable(collection, "ink/warning/p", ["highlight/400", "highlight/350"])
-    createContextualVariable(collection, "ink/warning/~", ["highlight/400", "highlight/100"])
+    createContextualVariable(collection, "ink/warning/p", ["highlight/550", "highlight/350"])
+    createContextualVariable(collection, "ink/warning/~", ["highlight/550", "highlight/100"])
 
-    createContextualVariable(collection, "ink/info/p", ["info/400", "info/350"])
-    createContextualVariable(collection, "ink/info/~", ["info/400", "info/100"])
+    createContextualVariable(collection, "ink/info/p", ["info/550", "info/350"])
+    createContextualVariable(collection, "ink/info/~", ["info/550", "info/100"])
 
-    createContextualVariable(collection, "ink/system/p", ["system/400", "system/350"])
-    createContextualVariable(collection, "ink/system/~", ["system/400", "system/100"])
+    createContextualVariable(collection, "ink/system/p", ["system/550", "system/350"])
+    createContextualVariable(collection, "ink/system/~", ["system/550", "system/100"])
 
-    createContextualVariable(collection, "thread/~/p", ["neutral/025", "neutral/400"])
-    createContextualVariable(collection, "thread/~/~", ["neutral/050", "neutral/400"])
+    createContextualVariable(collection, "thread/~/p", ["neutral/050", "neutral/550"])
+    createContextualVariable(collection, "thread/~/~", ["neutral/050", "neutral/550"])
     createContextualVariable(collection, "thread/~/f", ["neutral/100", "neutral/450"])
     createContextualVariable(collection, "thread/~/ff", ["neutral/350", "neutral/600"])
 
-    createContextualVariable(collection, "paint/primary/~", ["primary/400", "primary/375"])
+    createContextualVariable(collection, "paint/primary/~", ["primary/550", "primary/375"])
     createContextualVariable(collection, "paint/primary/f", ["primary/600", "primary/600"])
     createContextualVariable(collection, "paint/primary/ff", ["primary/900", "primary/900"])
 
-    createContextualVariable(collection, "paint/secondary/~", ["secondary/400", "secondary/375"])
+    createContextualVariable(collection, "paint/secondary/~", ["secondary/550", "secondary/375"])
     createContextualVariable(collection, "paint/secondary/f", ["secondary/600", "secondary/600"])
     createContextualVariable(collection, "paint/secondary/ff", ["secondary/900", "secondary/900"])
 
-    createContextualVariable(collection, "paint/positive/~", ["positive/400", "positive/375"])
+    createContextualVariable(collection, "paint/positive/~", ["positive/550", "positive/375"])
     createContextualVariable(collection, "paint/positive/f", ["positive/600", "positive/600"])
     createContextualVariable(collection, "paint/positive/ff", ["positive/900", "positive/900"])
 
-    createContextualVariable(collection, "paint/negative/~", ["negative/400", "negative/375"])
+    createContextualVariable(collection, "paint/negative/~", ["negative/550", "negative/375"])
     createContextualVariable(collection, "paint/negative/f", ["negative/600", "negative/600"])
     createContextualVariable(collection, "paint/negative/ff", ["negative/900", "negative/900"])
 
-    createContextualVariable(collection, "paint/warning/~", ["highlight/400", "highlight/375"])
+    createContextualVariable(collection, "paint/warning/~", ["highlight/550", "highlight/375"])
     createContextualVariable(collection, "paint/warning/f", ["highlight/600", "highlight/600"])
     createContextualVariable(collection, "paint/warning/ff", ["highlight/900", "highlight/900"])
 
-    createContextualVariable(collection, "paint/info/~", ["info/400", "info/375"])
+    createContextualVariable(collection, "paint/info/~", ["info/550", "info/375"])
     createContextualVariable(collection, "paint/info/f", ["info/600", "info/600"])
     createContextualVariable(collection, "paint/info/ff", ["info/900", "info/900"])
 
-    createContextualVariable(collection, "paint/system/~", ["system/400", "system/375"])
+    createContextualVariable(collection, "paint/system/~", ["system/550", "system/375"])
     createContextualVariable(collection, "paint/system/f", ["system/600", "system/600"])
     createContextualVariable(collection, "paint/system/ff", ["system/900", "system/900"])
 
-    createContextualVariable(collection, "paint/neutral/~", ["neutral/400", "neutral/375"])
+    createContextualVariable(collection, "paint/neutral/~", ["neutral/550", "neutral/375"])
     createContextualVariable(collection, "paint/neutral/f", ["neutral/600", "neutral/600"])
     createContextualVariable(collection, "paint/neutral/ff", ["neutral/900", "neutral/900"])
 
     createContextualVariable(collection, "stamp/white/pp", ["neutral/100", "neutral/100"])
-    createContextualVariable(collection, "stamp/white/p", ["neutral/025", "neutral/025"])
+    createContextualVariable(collection, "stamp/white/p", ["neutral/050", "neutral/050"])
     createContextualVariable(collection, "stamp/white/~", ["neutral/000", "neutral/000"])
     createContextualVariable(collection, "stamp/black/pp", ["neutral/800", "neutral/800"])
     createContextualVariable(collection, "stamp/black/p", ["neutral/900", "neutral/900"])

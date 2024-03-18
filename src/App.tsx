@@ -14,8 +14,8 @@ import { OptimizationMessage } from './views/OptimizationMessage'
 function App() {
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [optimizationOptions, setOptimizationOptions] = useState(Array<DropdownOption>({ value: 'Popism' }))
-    const [optimizationValue, setOptimizationValue] = useState<string>('Popism');
+    const [optimizationOptions, setOptimizationOptions] = useState(Array<DropdownOption>({ value: 'Univers' }))
+    const [optimizationValue, setOptimizationValue] = useState<string>('Univers');
     const [gridModel, setGridModel] = useState<Matrix.Grid>();
     const [showCompletedModal, setShowCompletedModal] = useState<boolean>(false)
     const [props, setProps] = useState<any>( { type: "VARIABLES", categories: ["PALETTE", "CONTEXTUAL", "DRAW"], update: false })

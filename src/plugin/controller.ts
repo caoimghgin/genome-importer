@@ -34,6 +34,16 @@ export default function () {
     on<CreateSwatchesEvent>('CREATE_SWATCHES', async ({grid, props}) => {
         await loadFonts()
 
+
+        if (grid.optimization === "Univers") {
+            if (isAction(props, "PALETTE")) createPaletteVariables(grid)
+            if (isAction(props, "CONTEXTUAL")) createContextualVariables(grid.optimization)
+            if (isAction(props, "DRAW")) createPaletteVariablesSwatches(grid, props.type)
+            createDimensionVariables()
+            figma.closePlugin()
+            return
+        }
+
         if (grid.optimization === "Popism") {
             if (isAction(props, "PALETTE")) createPaletteVariables(grid)
             if (isAction(props, "CONTEXTUAL")) createContextualVariables(grid.optimization)

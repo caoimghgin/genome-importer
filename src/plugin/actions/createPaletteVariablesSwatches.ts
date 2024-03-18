@@ -51,7 +51,7 @@ const createSemanticLabel = (column: Matrix.Column, offsetX: number) => {
     result.resize(swatchWidth, swatchHeight);
     result.x = offsetX;
     result.y = 0 - swatchHeight * 1.5;
-    bindVariableToNode(getVariable("ink/ff"), result)
+    bindVariableToNode(getVariable("~/ink/ff"), result)
     figma.currentPage.appendChild(result);
     return result;
 }
@@ -67,15 +67,15 @@ const createWeightLabel = (swatch: Matrix.Swatch, offsetY: number) => {
     result.resize(swatchWidth / 2, swatchHeight);
     result.x = -16;
     result.y = offsetY;
-    bindVariableToNode(getVariable("ink/ff"), result)
+    bindVariableToNode(getVariable("~/ink/ff"), result)
     figma.currentPage.appendChild(result);
     return result;
 }
 
 const createSwatchLabel = (swatch: Matrix.Swatch) => {
     const result = figma.createText();
-    const whiteStamp = getVariable("stamp/white/~")
-    const blackStamp = getVariable("stamp/black/~")
+    const whiteStamp = getVariable("~/stamp/white/~")
+    const blackStamp = getVariable("~/stamp/black/~")
     let label = swatch.hex.toUpperCase();
     if (swatch.isUserDefined) label = '⭐️ ' + label;
     if (swatch.isPinned) label = '📍 ' + label;
@@ -104,7 +104,7 @@ const createTargetLabel = (swatch: Matrix.Swatch, offsetX: number, offsetY: numb
     result.resize(swatchWidth / 2, swatchHeight);
     result.x = offsetX + swatchWidth + 24;
     result.y = offsetY;
-    bindVariableToNode(getVariable("ink/ff"), result)
+    bindVariableToNode(getVariable("~/ink/ff"), result)
     return result;
 }
 
@@ -139,6 +139,8 @@ const getVariable = (name: string) => {
     const result = localVariables.filter((variable) => {
         return nameScrubber(variable.name) === nameScrubber(name)
     });
+    
+    console.log("RESUTLT: ", name)
 
     if (result.length === 1) return result[0]
     throw new Error(`getVariable(${name}) returned ${result.length}`);

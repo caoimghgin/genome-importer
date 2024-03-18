@@ -2,7 +2,7 @@ import { weightedTargetsColumn } from "../constants/weightedTargets";
 
 export const universOptimization: weightedTargetsColumn = {
     rows: [
-        {target: 0, weight: '999'},
+        {target: 0, weight: undefined},
         {target: 5, weight: '950'},
         {target: 10, weight: '900'},
         {target: 15, weight: '850'},
@@ -23,7 +23,7 @@ export const universOptimization: weightedTargetsColumn = {
         {target: 90, weight: '100'},
         {target: 95, weight: '050'},
         {target: 97.5, weight: '025'},
-        {target: 100, weight: '000'},
+        {target: 100, weight: undefined},
     ],
     neutrals: [],
 };

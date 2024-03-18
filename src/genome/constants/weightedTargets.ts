@@ -24,20 +24,22 @@ export type weightedTargetsColumn = {
 
 export const Options = [
     { value: '0', label: 'Non-optimized', message: '' },
-    { value: '1', label: 'Genome', message: '' },
-    { value: '2', label: 'Genome v2', message: '' },
-    { value: '3', label: 'Popism', message: '' },
-    { value: '4', label: 'IBM Carbon', message: '' },
-    { value: '5', label: 'SalesForce Lightning', message: '' },
-    { value: '6', label: 'Adobe Spectrum', message: '' },
-    { value: '7', label: 'Ant', message: '' },
-    { value: '8', label: 'Material', message: '' },
-    { value: '9', label: 'Accessible Palette', message: '' },
-    { value: '10', label: 'ColorBox', message: '' },
+    { value: '1', label: 'Univers', message: '' },
+    { value: '2', label: 'Genome', message: '' },
+    { value: '3', label: 'Genome v2', message: '' },
+    { value: '4', label: 'Popism', message: '' },
+    { value: '5', label: 'IBM Carbon', message: '' },
+    { value: '6', label: 'SalesForce Lightning', message: '' },
+    { value: '7', label: 'Adobe Spectrum', message: '' },
+    { value: '8', label: 'Ant', message: '' },
+    { value: '9', label: 'Material', message: '' },
+    { value: '10', label: 'Accessible Palette', message: '' },
+    { value: '11', label: 'ColorBox', message: '' },
 ];
 
 enum WeightedTargetsOptions {
     Base = 0,
+    Univers,
     Genome,
     Genome2,
     Popism,
@@ -72,6 +74,8 @@ export const WeightedTargets = (index: WeightedTargetsOptions): weightedTargetsC
             return genomeOptimization_v2;
         case WeightedTargetsOptions.Material:
             return materialOptimization;
+        case WeightedTargetsOptions.Univers:
+            return universOptimization;
         case WeightedTargetsOptions.Popism:
             return popismOptimization;
         default:
